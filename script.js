@@ -213,6 +213,120 @@ for (let i = 0; i < 3; i++) {
     scene.add(object);
     discoveryObjects.push(object);
 }
+// ===============================
+// MOON ENVIRONMENT
+// ===============================
+
+const moonEnvironment = new THREE.Group();
+
+// Moon surface
+const moonGround = new THREE.Mesh(
+    new THREE.PlaneGeometry(100, 100),
+    new THREE.MeshStandardMaterial({
+        color: 0x999999,
+        roughness: 1
+    })
+);
+
+moonGround.rotation.x = -Math.PI / 2;
+moonGround.position.set(0, -0.94, -25);
+
+moonEnvironment.add(moonGround);
+// Moon craters
+for (let i = 0; i < 12; i++) {
+    const crater = new THREE.Mesh(
+        new THREE.CircleGeometry(
+            1 + Math.random() * 2,
+            32
+        ),
+        new THREE.MeshStandardMaterial({
+            color: 0x666666,
+            roughness: 1
+        })
+    );
+
+    crater.rotation.x = -Math.PI / 2;
+
+    crater.position.set(
+        (Math.random() - 0.5) * 60,
+        -0.92,
+        -Math.random() * 60
+    );
+
+    moonEnvironment.add(crater);
+}
+// Moon mountains
+for (let i = 0; i < 10; i++) {
+    const mountain = new THREE.Mesh(
+        new THREE.ConeGeometry(
+            3 + Math.random() * 3,
+            4 + Math.random() * 4,
+            6
+        ),
+        new THREE.MeshStandardMaterial({
+            color: 0x777777,
+            roughness: 1
+        })
+    );
+
+    mountain.position.set(
+        (Math.random() - 0.5) * 60,
+        1,
+        -20 - Math.random() * 35
+    );
+
+    moonEnvironment.add(mountain);
+}
+// Lunar research station
+const moonStation = new THREE.Mesh(
+    new THREE.BoxGeometry(5, 3, 4),
+    new THREE.MeshStandardMaterial({
+        color: 0xc5d5e5,
+        metalness: 0.7,
+        roughness: 0.3
+    })
+);
+
+moonStation.position.set(0, 0.5, -12);
+moonEnvironment.add(moonStation);
+
+// Blue station window
+const moonWindow = new THREE.Mesh(
+    new THREE.BoxGeometry(2, 1, 0.1),
+    new THREE.MeshBasicMaterial({
+        color: 0x20baff
+    })
+);
+
+moonWindow.position.set(0, 1, -9.94);
+moonEnvironment.add(moonWindow);
+// Moon discovery objects
+const moonDiscoveries = [];
+
+const moonColors = [0x00cfff, 0xffd34e, 0x70ffb0];
+
+for (let i = 0; i < 3; i++) {
+    const object = new THREE.Mesh(
+        new THREE.IcosahedronGeometry(0.65, 1),
+        new THREE.MeshStandardMaterial({
+            color: moonColors[i],
+            emissive: moonColors[i],
+            emissiveIntensity: 0.4
+        })
+    );
+
+    object.position.set(
+        (i - 1) * 4,
+        0.5,
+        -6 - i * 5
+    );
+
+    moonEnvironment.add(object);
+    moonDiscoveries.push(object);
+}
+// Hide Moon until its mission starts
+moonEnvironment.visible = false;
+scene.add(moonEnvironment);
 // Animation
 function animate() {
     updateExploration();
@@ -237,10 +351,21 @@ const lobbyScreen = document.getElementById("lobby");
 const missionScreen = document.getElementById("mission-screen");
 const startButton =
     document.getElementById("start-btn");
+const moonSelectButton = document.getElementById("moon-mission-select-btn");
+
+moonSelectButton.addEventListener("click", () => {
+    lobbyScreen.style.display = "none";
+    missionScreen.style.display = "none";
+    document.getElementById("moon-mission-screen").style.display = "flex";
+
+    console.log("Moon button clicked!");
+});
+
 startButton.addEventListener("click", () => {
     lobbyScreen.style.display = "none";
     missionScreen.style.display = "flex";
 });
+
 
 const quizScreen = document.getElementById("quiz-screen");
 
@@ -375,6 +500,7 @@ document.getElementById("next-btn").addEventListener("click", () => {
 // MARS EXPLORATION CONTROLS
 
 let discoveries = 0;
+let moonDiscoveriesFound = 0;
 
 const keys = {};
 
@@ -436,8 +562,50 @@ function updateExploration() {
         }
     });
 }
+// MOON DISCOVERY COLLECTION
+// MOON DISCOVERY COLLECTION
+if (moonEnvironment.visible) {
+    moonDiscoveries.forEach((object) => {
+        if (!object.visible) return;
+
+        const distance = astronaut.position.distanceTo(
+            object.position
+        );
+
+        if (distance < 1.5) {
+            object.visible = false;
+            moonDiscoveriesFound++;
+
+            document.getElementById("moon-discovery-count").textContent =
+                moonDiscoveriesFound;
+
+            console.log("Moon discoveries:", moonDiscoveriesFound);
+
+            if (moonDiscoveriesFound === 3) {
+                alert("Amazing! You discovered all 3 Moon objects!");
+            }
+        }
+    });
+}
 console.log("Begin button found:", beginButton);
 beginButton.addEventListener("click", () => {
     document.querySelector(".mission-screen").style.display = "none";
     document.querySelector(".quiz-screen").style.display = "flex";
+});
+const moonBeginButton = document.getElementById("moon-begin-btn");
+moonBeginButton.addEventListener("click", () => {
+    document.getElementById("moon-mission-screen").style.display = "none";
+
+    moonEnvironment.visible = true;
+    document.getElementById("exploration-info").style.display = "block";
+    document.getElementById("mars-info").style.display = "none";
+    document.getElementById("moon-info").style.display = "block";
+
+    explorationActive = true;
+
+    astronaut.position.set(0, 0, 0);
+    camera.position.set(0, 2, 8);
+    camera.lookAt(0, 0, -5);
+
+    console.log("Moon Mission Started!");
 });

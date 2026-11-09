@@ -16,15 +16,22 @@
         <h1>JUNIOR ASTRONAUT ACADEMY</h1>
         <p>YOUR JOURNEY TO THE GALAXY BEGINS HERE</p>
         <button id="start-btn">START MISSION</button>
+        <button id="moon-mission-select-btn">MOON MISSION 02</button>
         <p class="level">ASTRONAUT LEVEL 01</p>
     </div>
-
     <div class="mission-screen" id="mission-screen">
         <h1>MISSION 01</h1>
         <h2>THE RED PLANET</h2>
         <p>Your destination is Mars.</p>
         <p>Complete your astronaut training to begin exploration.</p>
         <button id="begin-btn">BEGIN TRAINING</button>
+    </div>
+    <div class="mission-screen" id="moon-mission-screen">
+        <h1>MISSION 02</h1>
+        <h2>THE MOON BASE</h2>
+        <p>Your destination is the Moon.</p>
+        <p>Explore the lunar surface and discover its secrets.</p>
+        <button id="moon-begin-btn">BEGIN MOON MISSION</button>
     </div>
 
     <div class="quiz-screen" id="quiz-screen">
@@ -46,9 +53,17 @@
     <script type="module" src="script.js"></script>
 </body>
 <div id="exploration-info">
-    LOCATION: MARS<br>
-    MISSION: PLANETARY DISCOVERY<br>
-    DISCOVERIES: <span id="discovery-count">0</span>/3
+    <div id="mars-info">
+        LOCATION: MARS<br>
+        MISSION: PLANETARY DISCOVERY<br>
+        DISCOVERIES: <span id="discovery-count">0</span>/3
+    </div>
+
+    <div id="moon-info" style="display: none;">
+        LOCATION: MOON<br>
+        MISSION: LUNAR DISCOVERY<br>
+        DISCOVERIES: <span id="moon-discovery-count">0</span>/3
+    </div>
 </div>
 <br>
 CONTROLS: W A S D

@@ -30,7 +30,7 @@ body {
     align-items: center;
     justify-content: center;
     text-align: center;
-    pointer-events: none;
+    pointer-events: auto;
     background: linear-gradient(180deg,
             rgba(3, 8, 25, 0.15),
             rgba(3, 8, 25, 0.55));
