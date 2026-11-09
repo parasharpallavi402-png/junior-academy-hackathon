@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Junior Astronaut Academy</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div id="game-container"></div>
+
+    <div class="lobby" id="lobby">
+        <h1>JUNIOR ASTRONAUT ACADEMY</h1>
+        <p>YOUR JOURNEY TO THE GALAXY BEGINS HERE</p>
+        <button id="start-btn">START MISSION</button>
+        <p class="level">ASTRONAUT LEVEL 01</p>
+    </div>
+
+    <div class="mission-screen" id="mission-screen">
+        <h1>MISSION 01</h1>
+        <h2>THE RED PLANET</h2>
+        <p>Your destination is Mars.</p>
+        <p>Complete your astronaut training to begin exploration.</p>
+        <button id="begin-btn">BEGIN TRAINING</button>
+    </div>
+
+    <div class="quiz-screen" id="quiz-screen">
+        <p class="quiz-label">ASTRONAUT TRAINING // LEVEL 01</p>
+        <h1>MARS KNOWLEDGE BATTLE</h1>
+
+        <div class="quiz-card">
+            <p id="question-number">QUESTION 01 / 05</p>
+            <h2 id="question">Loading question...</h2>
+
+            <div id="answers"></div>
+
+            <p id="feedback"></p>
+            <button id="next-btn" disabled>NEXT QUESTION</button>
+        </div>
+
+        <p id="score">ASTRONAUT XP: 0</p>
+    </div>
+    <script type="module" src="script.js"></script>
+</body>
+<div id="exploration-info">
+    LOCATION: MARS<br>
+    MISSION: PLANETARY DISCOVERY<br>
+    DISCOVERIES: <span id="discovery-count">0</span>/3
+</div>
+<br>
+CONTROLS: W A S D
+
+</html>
