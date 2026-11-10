@@ -217,3 +217,94 @@ h1 {
     letter-spacing: 2px;
     font-size: 13px;
 }
+
+.progress-container {
+    width: 220px;
+    height: 12px;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 20px;
+    overflow: hidden;
+    margin: 10px auto;
+}
+
+#progress-bar {
+    background-size: 200% 100%;
+    animation: progressShimmer 2s linear infinite;
+    width: 0%;
+    height: 100%;
+    background: linear-gradient(90deg, #35d0ff, #8b5cf6, #ec4899);
+    border-radius: 20px;
+    transition: width 0.4s ease;
+}
+
+.completed-mission {
+    background: linear-gradient(135deg, #087f5b, #20c997) !important;
+    border: 2px solid #7dffcf !important;
+    box-shadow: 0 0 12px rgba(32, 201, 151, 0.6);
+    color: white !important;
+    transition: all 0.3s ease;
+}
+
+.lobby button {
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.lobby button:hover {
+    transform: scale(1.04);
+    box-shadow: 0 0 15px rgba(53, 208, 255, 0.5);
+}
+
+.lobby h1 {
+    text-shadow:
+        0 0 8px #35d0ff,
+        0 0 18px #35d0ff,
+        0 0 30px #087fbd;
+    animation: titleGlow 2s ease-in-out infinite alternate;
+}
+
+@keyframes titleGlow {
+    from {
+        text-shadow: 0 0 8px #35d0ff;
+    }
+
+    to {
+        text-shadow: 0 0 25px #35d0ff,
+            0 0 40px #087fbd;
+    }
+}
+
+.lobby button:active {
+    transform: scale(0.96);
+    box-shadow: 0 0 20px rgba(53, 208, 255, 0.8);
+}
+
+@keyframes progressShimmer {
+    from {
+        background-position: 100% 0;
+    }
+
+    to {
+        background-position: -100% 0;
+    }
+}
+
+@media (max-width: 600px) {
+    .lobby {
+        width: 92%;
+        padding: 15px;
+    }
+
+    .lobby h1 {
+        font-size: 25px;
+    }
+
+    .lobby button {
+        width: 100%;
+        font-size: 13px;
+        margin: 6px 0;
+    }
+
+    .progress-container {
+        max-width: 100%;
+    }
+}
