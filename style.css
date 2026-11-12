@@ -827,3 +827,645 @@ footer {
         grid-template-columns: 1fr;
     }
 }
+
+/* CUTE STORY SCENE */
+.story-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    background: rgba(3, 7, 25, 0.88);
+    backdrop-filter: blur(8px);
+}
+
+.story-card {
+    position: relative;
+    width: min(520px, 100%);
+    padding: 28px;
+    text-align: center;
+    border: 2px solid #8b7cff;
+    border-radius: 24px;
+    background: linear-gradient(145deg, #171b48, #30205c);
+    color: white;
+    box-shadow: 0 0 35px #7565ff66;
+    animation: storyPop 0.55s ease both;
+    overflow: hidden;
+}
+
+.story-stars {
+    font-size: 20px;
+    letter-spacing: 12px;
+    animation: twinkle 1.5s infinite alternate;
+}
+
+.story-characters {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 22px;
+    margin: 18px 0;
+}
+
+.story-astronaut {
+    font-size: 65px;
+    animation: floatAstronaut 2s ease-in-out infinite;
+}
+
+.story-robot {
+    font-size: 58px;
+    animation: robotBounce 1.2s ease-in-out infinite;
+}
+
+.story-card h2 {
+    color: #ffe58a;
+    margin-bottom: 12px;
+}
+
+.story-card p {
+    line-height: 1.7;
+    color: #e4e5ff;
+}
+
+.story-continue {
+    margin-top: 20px;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 30px;
+    background: linear-gradient(90deg, #8d7cff, #ed82dc);
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.story-continue:hover {
+    transform: scale(1.06);
+}
+
+@keyframes storyPop {
+    from {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes floatAstronaut {
+
+    0%,
+    100% {
+        transform: translateY(0) rotate(-5deg);
+    }
+
+    50% {
+        transform: translateY(-13px) rotate(5deg);
+    }
+}
+
+@keyframes robotBounce {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-9px);
+    }
+}
+
+@keyframes twinkle {
+    from {
+        opacity: 0.45;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+.story-message {
+    min-height: 65px;
+    line-height: 1.8;
+    color: #e4e5ff;
+}
+
+.story-message::after {
+    content: "▍";
+    color: #ffe58a;
+    animation: blinkCursor 0.7s infinite;
+}
+
+@keyframes blinkCursor {
+    50% {
+        opacity: 0;
+    }
+}
+
+.story-characters {
+    display: flex !important;
+    justify-content: center;
+    align-items: center;
+    gap: 25px;
+    min-height: 100px;
+}
+
+.story-robot {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    font-size: 65px;
+    animation: robotBounce 1.2s infinite;
+}
+
+
+/* ===== REALISTIC MISSION WORLDS ===== */
+
+body {
+    background-attachment: fixed;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    transition: background 1s ease;
+}
+
+/* 1. EARTH ORBIT */
+body.mission-bg-1 {
+    background-image:
+        radial-gradient(ellipse at 75% 25%, #287bb5 0%, transparent 30%),
+        linear-gradient(145deg, #020817, #06345a, #010817);
+}
+
+/* 2. MOON LANDING */
+body.mission-bg-2 {
+    background-image:
+        radial-gradient(ellipse at 70% 85%, #777b88 0%, transparent 38%),
+        linear-gradient(160deg, #02030b, #111827, #252b38);
+}
+
+/* 3. MARS EXPLORATION */
+body.mission-bg-3 {
+    background-image:
+        radial-gradient(ellipse at 50% 100%, #bd5931 0%, transparent 45%),
+        linear-gradient(150deg, #130a12, #57251e, #17101c);
+}
+
+/* 4. ASTEROID BELT */
+body.mission-bg-4 {
+    background-image:
+        radial-gradient(ellipse at 50% 50%, #34304c 0%, transparent 45%),
+        linear-gradient(140deg, #03030c, #17152b, #050817);
+}
+
+/* 5. SPACE STATION */
+body.mission-bg-5 {
+    background-image:
+        radial-gradient(ellipse at 80% 80%, #176b8c 0%, transparent 35%),
+        linear-gradient(145deg, #020b1b, #06354a, #020817);
+}
+
+/* 6. GALAXY EXPLORER */
+body.mission-bg-6 {
+    background-image:
+        radial-gradient(ellipse at 65% 35%, #8545a9 0%, transparent 35%),
+        radial-gradient(ellipse at 25% 75%, #244f9b 0%, transparent 40%),
+        linear-gradient(140deg, #08051b, #211044, #05091c);
+}
+
+/* 7. SOLAR SYSTEM */
+body.mission-bg-7 {
+    background-image:
+        radial-gradient(ellipse at 50% 45%, #9c642b 0%, transparent 30%),
+        linear-gradient(140deg, #080b20, #192b4b, #070817);
+}
+
+/* 8. SATURN EXPEDITION */
+body.mission-bg-8 {
+    background-image:
+        radial-gradient(ellipse at 70% 40%, #b58a4c 0%, transparent 32%),
+        linear-gradient(140deg, #090b1a, #353047, #090b18);
+}
+
+/* 9. DEEP SPACE */
+body.mission-bg-9 {
+    background-image:
+        radial-gradient(ellipse at 50% 50%, #39206b 0%, transparent 35%),
+        linear-gradient(140deg, #01030b, #090d27, #02030b);
+}
+
+/* Floating star particles */
+body[class*="mission-bg-"]::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.7;
+    background-image:
+        radial-gradient(2px 2px at 15% 20%, white 50%, transparent 100%),
+        radial-gradient(2px 2px at 70% 30%, white 50%, transparent 100%),
+        radial-gradient(1px 1px at 45% 65%, white 50%, transparent 100%),
+        radial-gradient(2px 2px at 85% 80%, white 50%, transparent 100%);
+    background-size: 250px 250px;
+    animation: starFloat 35s linear infinite;
+}
+
+@keyframes starFloat {
+    from {
+        background-position: 0 0;
+    }
+
+    to {
+        background-position: 250px 250px;
+    }
+}
+
+@keyframes spaceDrift {
+    from {
+        background-position: 0% 0%;
+    }
+
+    to {
+        background-position: 100% 100%;
+    }
+}
+
+/* Floating star effect */
+body[class*="mission-bg-"]::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.55;
+    background-image:
+        radial-gradient(2px 2px at 20% 30%, white 50%, transparent 100%),
+        radial-gradient(2px 2px at 70% 60%, white 50%, transparent 100%),
+        radial-gradient(1px 1px at 40% 80%, white 50%, transparent 100%),
+        radial-gradient(2px 2px at 85% 15%, white 50%, transparent 100%);
+    background-size: 250px 250px;
+    animation: starFloat 35s linear infinite;
+}
+
+@keyframes starFloat {
+    from {
+        background-position: 0 0;
+    }
+
+    to {
+        background-position: 250px 250px;
+    }
+}
+
+/* CUTE SPACE DECORATIONS */
+.space-decoration {
+    position: fixed;
+    pointer-events: none;
+    z-index: 0;
+    user-select: none;
+    opacity: 0.85;
+}
+
+.space-planet {
+    top: 15%;
+    right: 7%;
+    font-size: 55px;
+    animation: planetFloat 6s ease-in-out infinite;
+}
+
+.space-moon {
+    bottom: 12%;
+    left: 5%;
+    font-size: 42px;
+    animation: moonFloat 7s ease-in-out infinite;
+}
+
+.space-star {
+    top: 25%;
+    left: 12%;
+    font-size: 25px;
+    animation: cuteTwinkle 2s ease-in-out infinite;
+}
+
+.space-sparkle {
+    bottom: 25%;
+    right: 15%;
+    font-size: 28px;
+    animation: cuteTwinkle 1.5s ease-in-out infinite;
+}
+
+@keyframes planetFloat {
+
+    0%,
+    100% {
+        transform: translateY(0) rotate(-8deg);
+    }
+
+    50% {
+        transform: translateY(-18px) rotate(8deg);
+    }
+}
+
+@keyframes moonFloat {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(14px);
+    }
+}
+
+@keyframes cuteTwinkle {
+
+    0%,
+    100% {
+        opacity: 0.35;
+        transform: scale(0.8);
+    }
+
+    50% {
+        opacity: 1;
+        transform: scale(1.2);
+    }
+}
+
+/* Keep quiz content above decorations */
+.quiz-container,
+.quiz-box,
+.question-card,
+.content-section {
+    position: relative;
+    z-index: 1;
+}
+
+/* CUTE SPACE DECORATIONS */
+.space-decoration {
+    position: fixed;
+    pointer-events: none;
+    z-index: 0;
+    user-select: none;
+    opacity: 0.85;
+}
+
+.space-planet {
+    top: 15%;
+    right: 7%;
+    font-size: 55px;
+    animation: planetFloat 6s ease-in-out infinite;
+}
+
+.space-moon {
+    bottom: 12%;
+    left: 5%;
+    font-size: 42px;
+    animation: moonFloat 7s ease-in-out infinite;
+}
+
+.space-star {
+    top: 25%;
+    left: 12%;
+    font-size: 25px;
+    animation: cuteTwinkle 2s ease-in-out infinite;
+}
+
+.space-sparkle {
+    bottom: 25%;
+    right: 15%;
+    font-size: 28px;
+    animation: cuteTwinkle 1.5s ease-in-out infinite;
+}
+
+@keyframes planetFloat {
+
+    0%,
+    100% {
+        transform: translateY(0) rotate(-8deg);
+    }
+
+    50% {
+        transform: translateY(-18px) rotate(8deg);
+    }
+}
+
+@keyframes moonFloat {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(14px);
+    }
+}
+
+@keyframes cuteTwinkle {
+
+    0%,
+    100% {
+        opacity: 0.35;
+        transform: scale(0.8);
+    }
+
+    50% {
+        opacity: 1;
+        transform: scale(1.2);
+    }
+}
+
+/* Keep quiz content above decorations */
+.quiz-container,
+.quiz-box,
+.question-card,
+.content-section {
+    position: relative;
+    z-index: 1;
+}
+
+/* ===== MISSION ENVIRONMENT EFFECTS ===== */
+
+body[class*="mission-bg-"]::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.45;
+}
+
+/* 1. EARTH ORBIT - glowing atmosphere */
+body.mission-bg-1::after {
+    background:
+        radial-gradient(ellipse at 80% 75%,
+            rgba(52, 180, 255, 0.25), transparent 40%);
+    animation: earthGlow 5s ease-in-out infinite alternate;
+}
+
+/* 2. MOON - floating lunar dust */
+body.mission-bg-2::after {
+    background-image:
+        radial-gradient(2px 2px at 20% 30%, #fff 50%, transparent 100%),
+        radial-gradient(2px 2px at 65% 70%, #ddd 50%, transparent 100%),
+        radial-gradient(1px 1px at 85% 20%, #fff 50%, transparent 100%);
+    background-size: 180px 180px;
+    animation: moonDust 18s linear infinite;
+}
+
+/* 3. MARS - drifting red dust */
+body.mission-bg-3::after {
+    background-image:
+        radial-gradient(ellipse, rgba(255, 145, 90, 0.22), transparent 65%);
+    background-size: 250% 250%;
+    animation: marsDust 12s ease-in-out infinite alternate;
+}
+
+/* 4. ASTEROID BELT - drifting rocky shapes */
+body.mission-bg-4::after {
+    background-image:
+        radial-gradient(circle at 20% 30%, #8b8792 0 3px, transparent 5px),
+        radial-gradient(circle at 65% 70%, #77717e 0 5px, transparent 8px),
+        radial-gradient(circle at 85% 20%, #aaa1a0 0 2px, transparent 5px);
+    background-size: 260px 230px;
+    animation: asteroidDrift 25s linear infinite;
+}
+
+/* 5. SPACE STATION - blue light glow */
+body.mission-bg-5::after {
+    background:
+        radial-gradient(ellipse at 30% 60%,
+            rgba(49, 205, 255, 0.2), transparent 45%);
+    animation: earthGlow 6s ease-in-out infinite alternate;
+}
+
+/* 6. GALAXY - purple nebula */
+body.mission-bg-6::after {
+    background:
+        radial-gradient(ellipse at 70% 40%,
+            rgba(190, 90, 255, 0.25), transparent 45%);
+    animation: galaxyGlow 9s ease-in-out infinite alternate;
+}
+
+/* 7. SOLAR SYSTEM - warm sunlight */
+body.mission-bg-7::after {
+    background:
+        radial-gradient(circle at 50% 45%,
+            rgba(255, 190, 90, 0.2), transparent 35%);
+    animation: earthGlow 7s ease-in-out infinite alternate;
+}
+
+/* 8. SATURN - golden ring-like glow */
+body.mission-bg-8::after {
+    background:
+        radial-gradient(ellipse at 70% 45%,
+            rgba(255, 205, 125, 0.24), transparent 35%);
+    animation: galaxyGlow 8s ease-in-out infinite alternate;
+}
+
+/* 9. DEEP SPACE - mysterious cosmic glow */
+body.mission-bg-9::after {
+    background:
+        radial-gradient(ellipse at 50% 50%,
+            rgba(130, 80, 255, 0.2), transparent 45%);
+    animation: galaxyGlow 10s ease-in-out infinite alternate;
+}
+
+/* Animations */
+@keyframes earthGlow {
+    from {
+        opacity: 0.2;
+    }
+
+    to {
+        opacity: 0.8;
+    }
+}
+
+@keyframes moonDust {
+    from {
+        background-position: 0 0;
+    }
+
+    to {
+        background-position: 180px -180px;
+    }
+}
+
+@keyframes marsDust {
+    from {
+        background-position: 0% 0%;
+    }
+
+    to {
+        background-position: 100% 100%;
+    }
+}
+
+@keyframes asteroidDrift {
+    from {
+        background-position: 0 0;
+    }
+
+    to {
+        background-position: 260px 230px;
+    }
+}
+
+@keyframes galaxyGlow {
+    from {
+        opacity: 0.2;
+        transform: scale(1);
+    }
+
+    to {
+        opacity: 0.8;
+        transform: scale(1.08);
+    }
+}
+
+/* MISSION SPECIAL OBJECT */
+.mission-special-object {
+    position: fixed;
+    right: 7%;
+    bottom: 12%;
+    font-size: clamp(45px, 7vw, 85px);
+    z-index: 0;
+    pointer-events: none;
+    user-select: none;
+    animation: missionObjectFloat 4s ease-in-out infinite;
+    filter: drop-shadow(0 0 15px rgba(150, 200, 255, 0.45));
+}
+
+@keyframes missionObjectFloat {
+
+    0%,
+    100% {
+        transform: translateY(0) rotate(-5deg);
+    }
+
+    50% {
+        transform: translateY(-22px) rotate(5deg);
+    }
+}
+
+/* Keep the quiz above the decoration */
+#quizMissionName,
+#quizScore,
+#questionNumber,
+#questionPercent,
+#questionBar,
+#questionText,
+#answerOptions,
+#feedback,
+#nextBtn {
+    position: relative;
+    z-index: 2;
+}

@@ -421,6 +421,59 @@ function startMission(index) {
 }
 
 function loadQuestion() {
+    const backgroundClasses = [
+        "mission-bg-1",
+        "mission-bg-2",
+        "mission-bg-3",
+        "mission-bg-4",
+        "mission-bg-5",
+        "mission-bg-6",
+        "mission-bg-7",
+        "mission-bg-8",
+        "mission-bg-9"
+    ];
+
+    document.body.classList.remove(...backgroundClasses);
+
+    document.body.classList.add(
+        backgroundClasses[currentMission]
+    );
+
+    // Mission-specific animated object
+    const missionObjects = [
+        "🛰️", "🚀", "🤖", "☄️", "🛸",
+        "👽", "☀️", "🪐", "🌌"
+    ];
+
+    let missionObject = document.querySelector(".mission-special-object");
+
+    if (!missionObject) {
+        missionObject = document.createElement("div");
+        missionObject.className = "mission-special-object";
+        document.body.appendChild(missionObject);
+    }
+
+    missionObject.textContent = missionObjects[currentMission];
+
+
+    // Add cute space decorations
+    // Add decorations only once
+    if (!document.querySelector(".space-decoration")) {
+        const decorations = [
+            ["🪐", "space-planet"],
+            ["🌙", "space-moon"],
+            ["✨", "space-star"],
+            ["💫", "space-sparkle"]
+        ];
+
+        decorations.forEach(([emoji, className]) => {
+            const decoration = document.createElement("div");
+            decoration.className = `space-decoration ${className}`;
+            decoration.textContent = emoji;
+            document.body.appendChild(decoration);
+        });
+    }
+
     const question = missions[currentMission].questions[currentQuestion];
     answered = false;
 
@@ -511,6 +564,7 @@ function nextQuestion() {
 // RESULTS AND UNLOCKING
 // ============================================
 
+
 function finishMission() {
     const accuracy = Math.round(currentCorrect / 20 * 100);
     const passed = currentCorrect >= 16;
@@ -536,13 +590,28 @@ function finishMission() {
     saved.totalStars = Object.values(saved.results)
         .reduce((sum, result) => sum + result.stars, 0);
 
-    if (bestPassed && currentMission < 8 && !saved.unlocked.includes(currentMission + 1)) {
+    if (bestPassed && currentMission < 8 &&
+        !saved.unlocked.includes(currentMission + 1)) {
         saved.unlocked.push(currentMission + 1);
     }
 
     saveProgress();
-    lastResults = { passed, correct: currentCorrect, accuracy, stars };
+
+    lastResults = {
+        passed,
+        correct: currentCorrect,
+        accuracy,
+        stars
+    };
+
     showResults(lastResults);
+
+    // Show the story after the results screen.
+    setTimeout(() => {
+        if (passed) {
+            showStoryScene(currentMission === 8 ? 8 : currentMission);
+        }
+    }, 1200);
 }
 
 function showResults(result) {
@@ -672,3 +741,110 @@ function initializeGame() {
 }
 
 initializeGame();
+// STORY SCENES BETWEEN MISSIONS
+const storyScenes = [
+    {
+        title: "A New Space Explorer! 🚀",
+        message: "Yay! You completed your first mission! ASTRO has detected a mysterious signal near the Moon. Let's investigate!",
+        astronaut: "👩‍🚀",
+        robot: "🤖"
+    },
+    {
+        title: "The Moon Mystery 🌙",
+        message: "Amazing work! You are getting closer to the signal. ASTRO says, 'Our next stop is the Red Planet — Mars!'",
+        astronaut: "🧑‍🚀",
+        robot: "🤖"
+    },
+    {
+        title: "Welcome to Mars! 🔴",
+        message: "Look at those red mountains! ASTRO has found an interesting rock sample. Let's learn more about this planet!",
+        astronaut: "👩‍🚀",
+        robot: "🤖"
+    },
+    {
+        title: "A Message from Space! ✨",
+        message: "A mysterious message has arrived from deep space. ASTRO needs your help to understand it!",
+        astronaut: "🧑‍🚀",
+        robot: "🤖"
+    },
+    {
+        title: "The Space Station! 🛰️",
+        message: "You've reached the space station! Your astronaut training is going wonderfully. One more discovery awaits!",
+        astronaut: "👩‍🚀",
+        robot: "🤖"
+    },
+    {
+        title: "A Distant Discovery! 🌌",
+        message: "ASTRO has spotted a beautiful distant galaxy. Let's explore what makes galaxies so special!",
+        astronaut: "🧑‍🚀",
+        robot: "🤖"
+    },
+    {
+        title: "The Solar System! ☀️",
+        message: "You are becoming a brilliant space explorer! It's time to learn more about our amazing solar system.",
+        astronaut: "👩‍🚀",
+        robot: "🤖"
+    },
+    {
+        title: "Almost a Space Hero! 🏆",
+        message: "ASTRO is so proud of you! One final mission remains before you earn your Junior Astronaut title!",
+        astronaut: "🧑‍🚀",
+        robot: "🤖"
+    },
+    {
+        title: "You're a Junior Astronaut! 🏆",
+        message: "YOU DID IT! All 9 missions completed! ASTRO says, 'You are now an official Junior Astronaut! Keep exploring, keep learning, and never stop dreaming!'",
+        astronaut: "👩‍🚀",
+        robot: "🤖"
+    }
+];
+// ASTRO'S TYPING ANIMATION
+function typeStoryText(element, message) {
+    let index = 0;
+
+    element.textContent = "";
+
+    const typing = setInterval(() => {
+        element.textContent += message[index];
+        index++;
+
+        if (index >= message.length) {
+            clearInterval(typing);
+        }
+    }, 35);
+}
+function showStoryScene(completedMissionIndex) {
+    const scene = storyScenes[completedMissionIndex];
+
+    if (!scene) return;
+
+    const overlay = document.createElement("div");
+    overlay.className = "story-overlay";
+
+    overlay.innerHTML = `
+        <div class="story-card">
+            <div class="story-stars">✨ ⭐ ✨</div>
+
+            <div class="story-characters">
+                <div class="story-astronaut">${scene.astronaut}</div>
+                <div class="story-robot">${scene.robot}</div>
+            </div>
+
+            <h2>${scene.title}</h2>
+            <p class="story-message"></p>
+
+            <button class="story-continue">
+                Continue Mission 🚀
+            </button>
+        </div>
+    `;
+
+    document.body.appendChild(overlay);
+    const messageElement = overlay.querySelector(".story-message");
+
+    typeStoryText(messageElement, scene.message);
+
+    overlay.querySelector(".story-continue").addEventListener("click", () => {
+        overlay.remove();
+    });
+}
