@@ -1,310 +1,301 @@
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Rajdhani', sans-serif;
 }
 
 body {
-    overflow: hidden;
-    background: #050817;
-    font-family: Arial, sans-serif;
-    color: white;
+  background: radial-gradient(circle at center, #142850 0%, #070b19 100%);
+  /* আপনার ছবির মতো ব্যাকগ্রাউন্ড ইমেজ থাকলে নিচের লাইনটি আনকমেন্ট করুন */
+  /* background: url('bg.jpg') no-repeat center center/cover; */
+  color: #ffffff;
+  min-height: 100vh;
+  overflow-x: hidden;
 }
 
-#game-container {
-    position: fixed;
-    inset: 0;
-    z-index: 0;
+/* ================= TOP HUD BAR ================= */
+.top-hud {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 25px;
+  background: linear-gradient(180deg, rgba(10, 20, 45, 0.9) 0%, rgba(10, 20, 45, 0.4) 100%);
+  border-bottom: 2px solid rgba(0, 210, 255, 0.3);
 }
 
-#game-container canvas {
-    display: block;
+.profile-box {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(15, 30, 65, 0.8);
+  padding: 6px 18px;
+  border-radius: 12px;
+  border: 2px solid #00d2ff;
+  box-shadow: 0 0 12px rgba(0, 210, 255, 0.4);
 }
 
-.lobby {
-    position: fixed;
-    inset: 0;
-    z-index: 2;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    pointer-events: auto;
-    background: linear-gradient(180deg,
-            rgba(3, 8, 25, 0.15),
-            rgba(3, 8, 25, 0.55));
+.avatar {
+  font-size: 28px;
+  background: #1e3c72;
+  padding: 5px;
+  border-radius: 8px;
 }
 
-h1 {
-    font-size: clamp(30px, 5vw, 65px);
-    letter-spacing: 5px;
-    color: #e8f6ff;
-    text-shadow: 0 0 20px #168cff;
-    margin-bottom: 15px;
-}
-
-.lobby p {
-    color: #9bbce5;
-    letter-spacing: 4px;
-    font-size: 12px;
-}
-
-#start-btn {
-    pointer-events: auto;
-    margin-top: 45px;
-    padding: 17px 55px;
-    border: 1px solid #52caff;
-    background: linear-gradient(90deg, #0754a8, #087fbd);
-    color: white;
-    font-size: 16px;
-    font-weight: bold;
-    letter-spacing: 3px;
-    cursor: pointer;
-    transition: 0.3s;
-    clip-path: polygon(8% 0, 100% 0, 92% 100%, 0 100%);
-}
-
-#start-btn:hover {
-    background: #13aaff;
-    box-shadow: 0 0 30px #168cff;
-    transform: scale(1.05);
+.player-name {
+  font-weight: 700;
+  font-size: 18px;
+  color: #fff;
 }
 
 .level {
-    position: absolute;
-    bottom: 35px;
-    left: 35px;
-    border-left: 3px solid #16aaff;
-    padding: 12px;
-    background: rgba(10, 30, 60, 0.7);
+  font-size: 13px;
+  color: #ffd700;
+  font-weight: 700;
 }
 
-.mission-screen {
-    display: none;
-    position: fixed;
-    inset: 0;
-    z-index: 5;
-    background: rgba(3, 8, 25, 0.94);
-    color: white;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    gap: 20px;
+.currency-bars {
+  display: flex;
+  gap: 15px;
 }
 
-.mission-screen h1 {
-    color: #35baff;
+.hud-pill {
+  background: rgba(10, 22, 50, 0.85);
+  padding: 8px 20px;
+  border-radius: 25px;
+  font-weight: 700;
+  font-size: 16px;
 }
 
-.mission-screen h2 {
-    letter-spacing: 5px;
+.hud-pill.gold {
+  border: 2px solid #ffb703;
+  color: #ffd166;
+  box-shadow: 0 0 10px rgba(255, 183, 3, 0.4);
 }
 
-.mission-screen p {
-    color: #a9c9ed;
-    letter-spacing: 1px;
+.hud-pill.cyan {
+  border: 2px solid #00f5d4;
+  color: #00f5d4;
+  box-shadow: 0 0 10px rgba(0, 245, 212, 0.4);
 }
 
-#begin-btn {
-    padding: 15px 35px;
-    background: #087fbd;
-    border: 1px solid #52caff;
-    color: white;
-    cursor: pointer;
-    letter-spacing: 2px;
-    font-weight: bold;
+.audio-controls {
+  display: flex;
+  gap: 10px;
 }
 
-.quiz-screen {
-    display: none;
-    position: fixed;
-    inset: 0;
-    z-index: 6;
-    background: linear-gradient(135deg, #050817, #10264b);
-    color: white;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    padding: 20px;
+.hud-icon-btn {
+  background: linear-gradient(135deg, #1b3b6f, #065a82);
+  color: white;
+  border: 1px solid #00d2ff;
+  padding: 8px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 700;
+  transition: 0.2s;
 }
 
-.quiz-label {
-    color: #38baff;
-    letter-spacing: 3px;
-    font-size: 12px;
+.hud-icon-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 12px #00d2ff;
 }
 
-.quiz-card {
-    width: min(600px, 95%);
-    padding: 30px;
-    margin-top: 25px;
-    background: rgba(16, 40, 75, 0.9);
-    border: 1px solid #168cff;
-    box-shadow: 0 0 25px #0754a8;
+/* ================= 3-COLUMN DASHBOARD ================= */
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 220px 1fr 260px;
+  gap: 20px;
+  padding: 20px 25px;
+  align-items: start;
 }
 
-.quiz-card h2 {
-    margin: 25px 0;
+/* LEFT SIDEBAR */
+.left-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
-#answers {
-    display: grid;
-    gap: 12px;
+.nav-tab {
+  background: rgba(13, 27, 62, 0.8);
+  border: 1px solid rgba(0, 210, 255, 0.4);
+  padding: 14px 18px;
+  border-radius: 12px;
+  font-size: 18px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.25s;
 }
 
-.answer-btn {
-    padding: 14px;
-    background: #142d50;
-    color: white;
-    border: 1px solid #398bcb;
-    cursor: pointer;
+.nav-tab.active {
+  background: linear-gradient(90deg, #ff9e00, #ff6d00);
+  border: 2px solid #ffe169;
+  color: #1a0b00;
+  box-shadow: 0 0 18px rgba(255, 158, 0, 0.7);
 }
 
-.answer-btn:hover:not(:disabled) {
-    background: #087fbd;
+.slogan-box {
+  margin-top: 15px;
+  padding: 15px;
+  background: rgba(0, 0, 0, 0.5);
+  border-left: 4px solid #ffd700;
+  font-style: italic;
+  font-size: 16px;
 }
 
-.answer-btn:disabled {
-    cursor: default;
-    opacity: 0.8;
+.slogan-box span {
+  color: #ffd700;
+  font-weight: 700;
 }
 
-.answer-btn.correct {
-    background: #176b4a;
+/* CENTER STAGE & LOGO */
+.center-stage {
+  text-align: center;
 }
 
-.answer-btn.wrong {
-    background: #8b3038;
+.game-logo h1 {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 42px;
+  font-weight: 900;
+  background: linear-gradient(180deg, #ffffff 20%, #80ffdb 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 4px 12px rgba(0, 210, 255, 0.6));
 }
 
-#feedback {
-    margin: 20px;
-    min-height: 24px;
+.game-logo h2 {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 28px;
+  color: #ffd166;
+  text-shadow: 0 2px 10px rgba(255, 183, 3, 0.8);
+  margin-bottom: 6px;
 }
 
-#next-btn {
-    padding: 12px 25px;
-    background: #087fbd;
-    color: white;
-    border: none;
-    cursor: pointer;
+.game-logo p {
+  letter-spacing: 2px;
+  color: #90e0ef;
+  font-weight: 700;
+  margin-bottom: 20px;
 }
 
-#next-btn:disabled {
-    opacity: 0.4;
-    cursor: not-allowed;
+/* 9 MISSION CARDS GRID */
+.missions-deck h3 {
+  font-family: 'Orbitron', sans-serif;
+  margin-bottom: 14px;
+  color: #00f5d4;
 }
 
-#score {
-    margin-top: 20px;
-    color: #42caff;
-    letter-spacing: 2px;
+.mission-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
 }
 
-#exploration-info {
-    display: none;
-    position: fixed;
-    top: 25px;
-    left: 25px;
-    z-index: 10;
-    padding: 18px;
-    background: rgba(5, 15, 35, 0.9);
-    border-left: 3px solid #35baff;
-    color: white;
-    letter-spacing: 2px;
-    font-size: 13px;
+.mission-card {
+  padding: 18px 12px;
+  border-radius: 16px;
+  font-size: 15px;
+  font-weight: 700;
+  color: white;
+  cursor: pointer;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.5);
+  transition: all 0.25s ease;
+  text-transform: uppercase;
+}
+
+.mission-card:hover {
+  transform: translateY(-5px) scale(1.03);
+  border-color: #ffffff;
+}
+
+/* ছবির মতো আলাদা আলাদা রঙিন কার্ড */
+.card-blue   { background: linear-gradient(145deg, #0077b6, #023e8a); box-shadow: 0 0 15px rgba(0, 119, 182, 0.6); }
+.card-purple { background: linear-gradient(145deg, #7209b7, #3a0ca3); box-shadow: 0 0 15px rgba(114, 9, 183, 0.6); }
+.card-red    { background: linear-gradient(145deg, #d90429, #8d0801); box-shadow: 0 0 15px rgba(217, 4, 41, 0.6); }
+.card-gold   { background: linear-gradient(145deg, #f77f00, #d62828); box-shadow: 0 0 15px rgba(247, 127, 0, 0.6); }
+.card-cyan   { background: linear-gradient(145deg, #00b4d8, #0077b6); }
+.card-orange { background: linear-gradient(145deg, #fb8500, #ffb703); color: #111; }
+.card-green  { background: linear-gradient(145deg, #2b9348, #007f5f); }
+.card-teal   { background: linear-gradient(145deg, #0a9396, #005f73); }
+.card-indigo { background: linear-gradient(145deg, #4361ee, #3f37c9); }
+
+/* RIGHT SIDEBAR */
+.right-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.glass-panel {
+  background: rgba(13, 27, 62, 0.85);
+  border: 2px solid #00b4d8;
+  border-radius: 16px;
+  padding: 18px;
+  box-shadow: 0 0 20px rgba(0, 180, 216, 0.3);
+}
+
+.event-box {
+  border-color: #ff9e00;
+  background: linear-gradient(145deg, rgba(60, 15, 90, 0.9), rgba(20, 15, 50, 0.9));
+}
+
+.badge {
+  background: #ffd166;
+  color: #000;
+  padding: 3px 10px;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 13px;
 }
 
 .progress-container {
-    width: 220px;
-    height: 12px;
-    background: rgba(255, 255, 255, 0.15);
-    border-radius: 20px;
-    overflow: hidden;
-    margin: 10px auto;
+  width: 100%;
+  height: 14px;
+  background: #071126;
+  border-radius: 10px;
+  margin-top: 10px;
+  overflow: hidden;
+  border: 1px solid #00f5d4;
 }
 
 #progress-bar {
-    background-size: 200% 100%;
-    animation: progressShimmer 2s linear infinite;
-    width: 0%;
-    height: 100%;
-    background: linear-gradient(90deg, #35d0ff, #8b5cf6, #ec4899);
-    border-radius: 20px;
-    transition: width 0.4s ease;
+  width: 0%;
+  height: 100%;
+  background: linear-gradient(90deg, #00f5d4, #00bbf9);
+  transition: width 0.4s ease;
 }
 
-.completed-mission {
-    background: linear-gradient(135deg, #087f5b, #20c997) !important;
-    border: 2px solid #7dffcf !important;
-    box-shadow: 0 0 12px rgba(32, 201, 151, 0.6);
-    color: white !important;
-    transition: all 0.3s ease;
+/* ================= MISSION INTRO & QUIZ SCREENS ================= */
+.mission-screen, .quiz-screen {
+  max-width: 650px;
+  margin: 60px auto;
+  padding: 35px;
+  text-align: center;
+  background: rgba(11, 22, 50, 0.92);
+  border: 2px solid #00f5d4;
+  border-radius: 20px;
+  box-shadow: 0 0 30px rgba(0, 245, 212, 0.4);
 }
 
-.lobby button {
-    transition: transform 0.25s ease, box-shadow 0.25s ease;
+.action-btn, #next-btn {
+  margin-top: 20px;
+  padding: 12px 30px;
+  font-size: 18px;
+  font-weight: 700;
+  border: none;
+  border-radius: 30px;
+  background: linear-gradient(90deg, #00f5d4, #00bbf9);
+  color: #051024;
+  cursor: pointer;
 }
 
-.lobby button:hover {
-    transform: scale(1.04);
-    box-shadow: 0 0 15px rgba(53, 208, 255, 0.5);
-}
-
-.lobby h1 {
-    text-shadow:
-        0 0 8px #35d0ff,
-        0 0 18px #35d0ff,
-        0 0 30px #087fbd;
-    animation: titleGlow 2s ease-in-out infinite alternate;
-}
-
-@keyframes titleGlow {
-    from {
-        text-shadow: 0 0 8px #35d0ff;
-    }
-
-    to {
-        text-shadow: 0 0 25px #35d0ff,
-            0 0 40px #087fbd;
-    }
-}
-
-.lobby button:active {
-    transform: scale(0.96);
-    box-shadow: 0 0 20px rgba(53, 208, 255, 0.8);
-}
-
-@keyframes progressShimmer {
-    from {
-        background-position: 100% 0;
-    }
-
-    to {
-        background-position: -100% 0;
-    }
-}
-
-@media (max-width: 600px) {
-    .lobby {
-        width: 92%;
-        padding: 15px;
-    }
-
-    .lobby h1 {
-        font-size: 25px;
-    }
-
-    .lobby button {
-        width: 100%;
-        font-size: 13px;
-        margin: 6px 0;
-    }
-
-    .progress-container {
-        max-width: 100%;
-    }
+/* BOTTOM BAR */
+.bottom-hud {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 25px;
+  background: rgba(5, 12, 28, 0.9);
+  border-top: 1px solid rgba(0, 210, 255, 0.3);
+  font-size: 15px;
 }

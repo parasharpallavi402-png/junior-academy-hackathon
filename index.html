@@ -1,185 +1,181 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Junior Astronaut Academy</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Junior Astronaut Mission Trainer</title>
+  <link href="https://googleapis.com" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
+  <div id="game-container"></div>
 
-    <div id="game-container"></div>
+  <!-- MAIN LOBBY (ছবির মতো 3-কলাম গেমিং ড্যাশবোর্ড) -->
+  <div class="lobby" id="lobby">
+    
+    <!-- TOP BAR (প্রোফাইল এবং XP/লেভেল) -->
+    <header class="top-hud">
+      <div class="profile-box">
+        <div class="avatar">👨‍🚀</div>
+        <div>
+          <span class="player-name">JuniorAstronaut007</span>
+          <p class="level">ASTRONAUT LEVEL 01</p>
+        </div>
+      </div>
 
-    <div class="lobby" id="lobby">
+      <div class="currency-bars">
+        <div class="hud-pill gold"><span id="total-xp-display">TOTAL XP: 0</span></div>
+        <div class="hud-pill cyan"><span>💎 250</span></div>
+      </div>
 
-        <h1>JUNIOR ASTRONAUT ACADEMY</h1>
-        <p>CHOOSE YOUR NEXT SPACE ADVENTURE</p>
+      <div class="audio-controls">
+        <button id="music-btn" class="hud-icon-btn">🎵 MUSIC: OFF</button>
+        <button id="music-next-btn" class="hud-icon-btn">🔄 CHANGE MUSIC</button>
+      </div>
+    </header>
 
-        <h2>SELECT YOUR MISSION</h2>
-        <button id="music-btn">🎵 MUSIC: OFF</button>
-        <button id="music-next-btn">🔄 CHANGE MUSIC</button>
+    <!-- CENTER WORKSPACE -->
+    <div class="dashboard-grid">
+      
+      <!-- LEFT SIDEBAR (মেনু বাটনগুলো) -->
+      <aside class="left-sidebar">
+        <div class="nav-tab active">🏠 Home</div>
+        <div class="nav-tab">🚀 Missions</div>
+        <div class="nav-tab">🧠 Space Quiz</div>
+        <div class="nav-tab">🏆 Achievements</div>
+        <div class="nav-tab">📜 Certificate</div>
+        <div class="slogan-box">Dream Big...<br><span>Reach for the Stars!</span></div>
+      </aside>
 
-        <button id="start-btn">MISSION 01 — MARS</button>
+      <!-- MIDDLE HERO & MISSION CARDS -->
+      <main class="center-stage">
+        <div class="game-logo">
+          <h1>JUNIOR ASTRONAUT</h1>
+          <h2>MISSION TRAINER</h2>
+          <p>CHOOSE YOUR NEXT SPACE ADVENTURE</p>
+        </div>
 
-        <button id="moon-mission-select-btn">
-            MISSION 02 — MOON
-        </button>
+        <!-- আপনার সবগুলো ৯টি মিশন বাটন (আগের ID সহ) -->
+        <div class="missions-deck">
+          <h3>SELECT YOUR MISSION</h3>
+          <div class="mission-grid">
+            <button id="start-btn" class="mission-card card-blue">MISSION 01 — MARS</button>
+            <button id="moon-mission-select-btn" class="mission-card card-purple">MISSION 02 — MOON</button>
+            <button id="station-select-btn" class="mission-card card-red">MISSION 03 — STATION EMERGENCY</button>
+            <button id="solar-select-btn" class="mission-card card-gold">MISSION 04 — SOLAR STORM</button>
+            <button id="water-select-btn" class="mission-card card-cyan">MISSION 05 — WATER SHORTAGE</button>
+            <button id="power-select-btn" class="mission-card card-orange">MISSION 06 — POWER FAILURE</button>
+            <button id="energy-select-btn" class="mission-card card-green">MISSION 07 — ENERGY CONSERVATION</button>
+            <button id="oxygen-select-btn" class="mission-card card-teal">MISSION 08 — OXYGEN EMERGENCY</button>
+            <button id="life-support-select-btn" class="mission-card card-indigo">MISSION 09 — LIFE SUPPORT PRIORITIES</button>
+          </div>
+        </div>
+      </main>
 
-        <button id="station-select-btn">
-            MISSION 03 — STATION EMERGENCY
-        </button>
+      <!-- RIGHT SIDEBAR (প্রোগ্রেস বার এবং স্ট্যাটাস) -->
+      <aside class="right-sidebar">
+        <div class="glass-panel event-box">
+          <span class="badge">Special Event!</span>
+          <p>Complete Missions & Get Free Rewards!</p>
+        </div>
 
-        <button id="solar-select-btn">
-            MISSION 04 — SOLAR STORM
-        </button>
-
-        <button id="water-select-btn">
-            MISSION 05 — WATER SHORTAGE
-        </button>
-
-        <button id="power-select-btn">
-            MISSION 06 — POWER FAILURE
-        </button>
-
-        <button id="energy-select-btn">
-            MISSION 07 — ENERGY CONSERVATION
-        </button>
-
-        <button id="oxygen-select-btn">
-            MISSION 08 — OXYGEN EMERGENCY
-        </button>
-
-        <button id="life-support-select-btn">
-            MISSION 09 — LIFE SUPPORT PRIORITIES
-        </button>
-
-        <p class="level">ASTRONAUT LEVEL 01</p>
-        <p id="progress-display">MISSIONS COMPLETED: 0 / 9</p>
-        <div class="progress-container">
+        <div class="glass-panel progress-box">
+          <h3>🏆 Your Progress</h3>
+          <p id="progress-display">MISSIONS COMPLETED: 0 / 9</p>
+          <div class="progress-container">
             <div id="progress-bar"></div>
+          </div>
         </div>
-        <p id="total-xp-display">TOTAL XP: 0</p>
+      </aside>
 
     </div>
-    <div class="mission-screen" id="mission-screen">
-        <h1>MISSION 01</h1>
-        <h2>THE RED PLANET</h2>
-        <p>Your destination is Mars.</p>
-        <p>Complete your astronaut training to begin exploration.</p>
-        <button id="begin-btn">BEGIN TRAINING</button>
+
+    <!-- BOTTOM TICKER -->
+    <footer class="bottom-hud">
+      <span>💬 Let's play and explore the universe!</span>
+      <span class="controls-hint">CONTROLS: <b>W A S D</b></span>
+    </footer>
+  </div>
+
+  <!-- ================= MISSION INTRO SCREENS (আগের মতোই রাখা হয়েছে) ================= -->
+  <div class="mission-screen" id="mission-screen">
+    <h1>MISSION 01</h1><h2>THE RED PLANET</h2>
+    <p>Your destination is Mars.</p><p>Complete your astronaut training to begin exploration.</p>
+    <button id="begin-btn" class="action-btn">BEGIN TRAINING</button>
+  </div>
+
+  <div class="mission-screen" id="moon-mission-screen">
+    <h1>MISSION 02</h1><h2>THE MOON BASE</h2>
+    <p>Your destination is the Moon.</p><p>Explore the lunar surface and discover its secrets.</p>
+    <button id="moon-begin-btn" class="action-btn">BEGIN MOON MISSION</button>
+  </div>
+
+  <div class="mission-screen" id="station-mission-screen">
+    <h1>MISSION 03</h1><h2>STATION EMERGENCY</h2>
+    <p>Your space station has reported an emergency.</p><p>Use your knowledge to identify the problem and protect the crew.</p>
+    <button id="station-begin-btn" class="action-btn">BEGIN TRAINING</button>
+  </div>
+
+  <div class="mission-screen" id="solar-mission-screen">
+    <h1>MISSION 04</h1><h2>SOLAR STORM</h2>
+    <p>A powerful solar storm is approaching Earth and your space station.</p><p>Understand space weather and protect the station's systems.</p>
+    <button id="solar-begin-btn" class="action-btn">BEGIN TRAINING</button>
+  </div>
+
+  <div class="mission-screen" id="water-mission-screen">
+    <h1>MISSION 05</h1><h2>WATER SHORTAGE</h2>
+    <p>Your space station is running low on water supplies.</p><p>Manage resources and learn how astronauts recycle water.</p>
+    <button id="water-begin-btn" class="action-btn">BEGIN TRAINING</button>
+  </div>
+
+  <div class="mission-screen" id="power-mission-screen">
+    <h1>MISSION 06</h1><h2>POWER FAILURE</h2>
+    <p>The space station has unexpectedly lost electrical power.</p><p>Identify essential systems and learn about backup energy.</p>
+    <button id="power-begin-btn" class="action-btn">BEGIN TRAINING</button>
+  </div>
+
+  <div class="mission-screen" id="energy-mission-screen">
+    <h1>MISSION 07</h1><h2>ENERGY CONSERVATION</h2>
+    <p>Your station must operate efficiently with limited energy.</p><p>Discover smart ways to conserve electricity.</p>
+    <button id="energy-begin-btn" class="action-btn">BEGIN TRAINING</button>
+  </div>
+
+  <div class="mission-screen" id="oxygen-mission-screen">
+    <h1>MISSION 08</h1><h2>OXYGEN EMERGENCY</h2>
+    <p>The station's oxygen monitoring system has detected a problem.</p><p>Learn about oxygen monitoring and crew safety.</p>
+    <button id="oxygen-begin-btn" class="action-btn">BEGIN TRAINING</button>
+  </div>
+
+  <div class="mission-screen" id="life-support-mission-screen">
+    <h1>MISSION 09</h1><h2>LIFE SUPPORT PRIORITIES</h2>
+    <p>Your space station needs careful resource management.</p><p>Make smart decisions about air, water, temperature and crew safety.</p>
+    <button id="life-support-begin-btn" class="action-btn">BEGIN TRAINING</button>
+  </div>
+
+  <!-- ================= QUIZ SCREEN ================= -->
+  <div class="quiz-screen" id="quiz-screen">
+    <p class="quiz-label">ASTRONAUT TRAINING // LEVEL 01</p>
+    <h1>MARS KNOWLEDGE BATTLE</h1>
+    <div class="quiz-card">
+      <p id="question-number">QUESTION 01 / 05</p>
+      <h2 id="question">Loading question...</h2>
+      <div id="answers"></div>
+      <p id="feedback"></p>
+      <button id="next-btn" disabled>NEXT QUESTION</button>
     </div>
-    <!-- MISSION 03 -->
-    <div class="mission-screen" id="station-mission-screen">
-        <h1>MISSION 03</h1>
-        <h2>STATION EMERGENCY</h2>
+    <p id="score">ASTRONAUT XP: 0</p>
+  </div>
 
-        <p>Your space station has reported an emergency.</p>
-        <p>Use your knowledge to identify the problem and protect the crew.</p>
-
-        <button id="station-begin-btn">BEGIN TRAINING</button>
-    </div>
-    <!-- MISSION 04 -->
-    <div class="mission-screen" id="solar-mission-screen">
-        <h1>MISSION 04</h1>
-        <h2>SOLAR STORM</h2>
-
-        <p>A powerful solar storm is approaching Earth and your space station.</p>
-        <p>Understand space weather and protect the station's systems.</p>
-
-        <button id="solar-begin-btn">BEGIN TRAINING</button>
-    </div>
-    <!-- MISSION 05 -->
-    <div class="mission-screen" id="water-mission-screen">
-        <h1>MISSION 05</h1>
-        <h2>WATER SHORTAGE</h2>
-
-        <p>Your space station is running low on water supplies.</p>
-        <p>Manage resources and learn how astronauts recycle water.</p>
-
-        <button id="water-begin-btn">BEGIN TRAINING</button>
-    </div>
-    <!-- MISSION 06 -->
-    <div class="mission-screen" id="power-mission-screen">
-        <h1>MISSION 06</h1>
-        <h2>POWER FAILURE</h2>
-
-        <p>The space station has unexpectedly lost electrical power.</p>
-        <p>Identify essential systems and learn about backup energy.</p>
-
-        <button id="power-begin-btn">BEGIN TRAINING</button>
-    </div>
-    <!-- MISSION 07 -->
-    <div class="mission-screen" id="energy-mission-screen">
-        <h1>MISSION 07</h1>
-        <h2>ENERGY CONSERVATION</h2>
-
-        <p>Your station must operate efficiently with limited energy.</p>
-        <p>Discover smart ways to conserve electricity.</p>
-
-        <button id="energy-begin-btn">BEGIN TRAINING</button>
-    </div>
-    <!-- MISSION 08 -->
-    <div class="mission-screen" id="oxygen-mission-screen">
-        <h1>MISSION 08</h1>
-        <h2>OXYGEN EMERGENCY</h2>
-
-        <p>The station's oxygen monitoring system has detected a problem.</p>
-        <p>Learn about oxygen monitoring and crew safety.</p>
-
-        <button id="oxygen-begin-btn">BEGIN TRAINING</button>
-    </div>
-    <!-- MISSION 09 -->
-    <div class="mission-screen" id="life-support-mission-screen">
-        <h1>MISSION 09</h1>
-        <h2>LIFE SUPPORT PRIORITIES</h2>
-
-        <p>Your space station needs careful resource management.</p>
-        <p>Make smart decisions about air, water, temperature and crew safety.</p>
-
-        <button id="life-support-begin-btn">BEGIN TRAINING</button>
-    </div>
-    <div class="mission-screen" id="moon-mission-screen">
-        <h1>MISSION 02</h1>
-        <h2>THE MOON BASE</h2>
-        <p>Your destination is the Moon.</p>
-        <p>Explore the lunar surface and discover its secrets.</p>
-        <button id="moon-begin-btn">BEGIN MOON MISSION</button>
-    </div>
-
-    <div class="quiz-screen" id="quiz-screen">
-        <p class="quiz-label">ASTRONAUT TRAINING // LEVEL 01</p>
-        <h1>MARS KNOWLEDGE BATTLE</h1>
-
-        <div class="quiz-card">
-            <p id="question-number">QUESTION 01 / 05</p>
-            <h2 id="question">Loading question...</h2>
-
-            <div id="answers"></div>
-
-            <p id="feedback"></p>
-            <button id="next-btn" disabled>NEXT QUESTION</button>
-        </div>
-
-        <p id="score">ASTRONAUT XP: 0</p>
-    </div>
-    <script type="module" src="script.js"></script>
-</body>
-<div id="exploration-info">
+  <!-- ================= EXPLORATION HUD ================= -->
+  <div id="exploration-info">
     <div id="mars-info">
-        LOCATION: MARS<br>
-        MISSION: PLANETARY DISCOVERY<br>
-        DISCOVERIES: <span id="discovery-count">0</span>/3
+      LOCATION: MARS<br>MISSION: PLANETARY DISCOVERY<br>DISCOVERIES: <span id="discovery-count">0</span>/3
     </div>
-
     <div id="moon-info" style="display: none;">
-        LOCATION: MOON<br>
-        MISSION: LUNAR DISCOVERY<br>
-        DISCOVERIES: <span id="moon-discovery-count">0</span>/3
+      LOCATION: MOON<br>MISSION: LUNAR DISCOVERY<br>DISCOVERIES: <span id="moon-discovery-count">0</span>/3
     </div>
-</div>
-<br>
-CONTROLS: W A S D
+  </div>
 
+  <script type="module" src="script.js"></script>
+</body>
 </html>
