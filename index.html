@@ -91,6 +91,43 @@
         <!-- PAGE 2: MISSIONS -->
         <section id="missionsPage" class="page">
 
+            <div id="astroResourcePanel" class="astro-resource-panel">
+                <h3>🚀 MISSION RESOURCES</h3>
+
+                <div class="resource-item">
+                    <div class="resource-heading">
+                        <span>🫁 Life Support</span>
+                        <span id="oxygenValue">100%</span>
+                    </div>
+                    <div class="resource-track">
+                        <div id="oxygenBar" class="resource-fill oxygen-fill"></div>
+                    </div>
+                </div>
+
+                <div class="resource-item">
+                    <div class="resource-heading">
+                        <span>⚡ Power</span>
+                        <span id="powerValue">100%</span>
+                    </div>
+                    <div class="resource-track">
+                        <div id="powerBar" class="resource-fill power-fill"></div>
+                    </div>
+                </div>
+
+                <div class="resource-item">
+                    <div class="resource-heading">
+                        <span>🛡️ Radiation Shielding</span>
+                        <span id="shieldValue">100%</span>
+                    </div>
+                    <div class="resource-track">
+                        <div id="shieldBar" class="resource-fill shield-fill"></div>
+                    </div>
+                </div>
+
+                <p id="resourceWarning">All systems operating normally.</p>
+            </div>
+
+
             <button class="secondary-btn" onclick="openAlienExplorer()">
                 👽 EXPLORE ALIEN PLANET
             </button>
@@ -229,6 +266,43 @@
                     </div>
                 </div>
 
+                <!-- ASTROQUEST RESOURCE METERS -->
+                <div class="astro-resource-panel">
+                    <h4>🚀 ASTRONAUT RESOURCES</h4>
+
+                    <div class="resource-item">
+                        <div class="resource-heading">
+                            <span>🫁 Life Support</span>
+                            <span id="quizOxygenValue">100%</span>
+                        </div>
+                        <div class="resource-track">
+                            <div id="quizOxygenBar" class="resource-fill oxygen-fill"></div>
+                        </div>
+                    </div>
+
+                    <div class="resource-item">
+                        <div class="resource-heading">
+                            <span>⚡ Power</span>
+                            <span id="quizPowerValue">100%</span>
+                        </div>
+                        <div class="resource-track">
+                            <div id="quizPowerBar" class="resource-fill power-fill"></div>
+                        </div>
+                    </div>
+
+                    <div class="resource-item">
+                        <div class="resource-heading">
+                            <span>🛡️ Radiation Shielding</span>
+                            <span id="quizShieldValue">100%</span>
+                        </div>
+                        <div class="resource-track">
+                            <div id="quizShieldBar" class="resource-fill shield-fill"></div>
+                        </div>
+                    </div>
+
+                    <p id="quizResourceWarning">All systems operating normally.</p>
+                </div>
+
                 <p>MISSION PROGRESS</p>
                 <div class="control-progress">
                     <div id="control-progress-fill"></div>
@@ -275,6 +349,14 @@
                 <h3 id="simTitle">Space Explorer</h3>
                 <p id="simDescription">Welcome to your space simulation.</p>
                 <div class="sim-objectives" id="simObjectives"></div>
+
+                <button class="secondary-btn" onclick="activateSimulationEquipment()">
+                    ⚡ ACTIVATE MISSION EQUIPMENT
+                </button>
+                <p id="equipmentMessage" class="small-note">
+                    Mission equipment is currently inactive.
+                </p>
+
                 <button class="primary-btn" onclick="completeSimulation()">COMPLETE SIMULATION ✓</button>
                 <p class="small-note">Educational mini-briefing. Simulation completion is separate from your quiz score.
                 </p>

@@ -424,6 +424,10 @@ function startMission(index) {
     currentScore = 0;
     currentCorrect = 0;
     lastResults = null;
+    // Reset astronaut resources for the new mission
+    if (typeof resetAstroResources === "function") {
+        resetAstroResources();
+    }
 
     // Start the countdown before opening the quiz
     if (typeof window.startMissionCountdown === "function") {
@@ -497,6 +501,7 @@ function loadQuestion() {
     }
 
     const question = missions[currentMission].questions[currentQuestion];
+    triggerRandomSpaceEmergency();
     answered = false;
 
     document.getElementById("quizMissionName").textContent =
@@ -688,6 +693,7 @@ function showResults(result) {
 
 function openSimulation(index) {
     simulationMission = index;
+    simulationPowerUsed = false;
     const mission = missions[index];
 
     document.getElementById("simTitle").textContent = mission.name;
@@ -995,7 +1001,7 @@ function showStoryScene(completedMissionIndex) {
             <div class="astronaut-id-avatar">👩‍🚀</div>
 
             <p>SPACE EXPLORER</p>
-
+<h3 id="astronaut-display-name">ASTRONAUT NAME</h3>
             <input
                 id="astronaut-player-name"
                 type="text"
@@ -1033,6 +1039,12 @@ function showStoryScene(completedMissionIndex) {
         nameInput.value = localStorage.getItem(
             "astronautPlayerName"
         ) || "";
+        const displayName = card.querySelector(
+            "#astronaut-display-name"
+        );
+
+        displayName.textContent =
+            nameInput.value.trim().toUpperCase() || "ASTRONAUT NAME";
 
         card.querySelector("#save-astronaut-name")
             .addEventListener("click", () => {
@@ -1048,6 +1060,7 @@ function showStoryScene(completedMissionIndex) {
 
                 card.querySelector("h2").textContent =
                     name.toUpperCase() + "'S ID 🚀";
+                displayName.textContent = name.toUpperCase();
             });
 
         card.querySelector("#close-astronaut-id")
@@ -2176,3 +2189,288 @@ window.showMissionTravelScene = function (callback) {
         }
     }, 7500);
 };
+// ===================================
+// ASTROQUEST RESOURCE SYSTEM
+// ===================================
+
+let astroResources = {
+    oxygen: 100,
+    power: 100,
+    shield: 100
+};
+
+function updateAstroResources() {
+    const oxygenBar = document.getElementById("oxygenBar");
+    const powerBar = document.getElementById("powerBar");
+    const shieldBar = document.getElementById("shieldBar");
+
+    const quizOxygenBar = document.getElementById("quizOxygenBar");
+    const quizPowerBar = document.getElementById("quizPowerBar");
+    const quizShieldBar = document.getElementById("quizShieldBar");
+
+
+    const warning = document.getElementById("resourceWarning");
+    const quizWarning = document.getElementById("quizResourceWarning");
+
+    if (!oxygenBar || !powerBar || !shieldBar) return;
+
+    if (oxygenBar) oxygenBar.style.width = astroResources.oxygen + "%";
+    if (powerBar) powerBar.style.width = astroResources.power + "%";
+    if (shieldBar) shieldBar.style.width = astroResources.shield + "%";
+
+    if (quizOxygenBar) quizOxygenBar.style.width = astroResources.oxygen + "%";
+    if (quizPowerBar) quizPowerBar.style.width = astroResources.power + "%";
+    if (quizShieldBar) quizShieldBar.style.width = astroResources.shield + "%";
+
+
+    const oxygenValue = document.getElementById("oxygenValue");
+    const powerValue = document.getElementById("powerValue");
+    const shieldValue = document.getElementById("shieldValue");
+
+    const quizOxygenValue = document.getElementById("quizOxygenValue");
+    const quizPowerValue = document.getElementById("quizPowerValue");
+    const quizShieldValue = document.getElementById("quizShieldValue");
+
+    if (oxygenValue) oxygenValue.textContent = astroResources.oxygen + "%";
+    if (powerValue) powerValue.textContent = astroResources.power + "%";
+    if (shieldValue) shieldValue.textContent = astroResources.shield + "%";
+
+    if (quizOxygenValue) quizOxygenValue.textContent = astroResources.oxygen + "%";
+    if (quizPowerValue) quizPowerValue.textContent = astroResources.power + "%";
+    if (quizShieldValue) quizShieldValue.textContent = astroResources.shield + "%";
+
+
+    let warningMessage = "✅ All systems operating normally.";
+    let warningColor = "#8fffdc";
+
+    if (
+        astroResources.oxygen <= 25 ||
+        astroResources.power <= 25 ||
+        astroResources.shield <= 25
+    ) {
+        warningMessage = "⚠️ WARNING: One or more resources are critically low!";
+        warningColor = "#ff6969";
+    } else if (
+        astroResources.oxygen <= 50 ||
+        astroResources.power <= 50 ||
+        astroResources.shield <= 50
+    ) {
+        warningMessage = "⚠️ Caution: Monitor your mission resources.";
+        warningColor = "#ffd34e";
+    }
+
+    if (warning) {
+        warning.textContent = warningMessage;
+        warning.style.color = warningColor;
+    }
+
+    if (quizWarning) {
+        quizWarning.textContent = warningMessage;
+        quizWarning.style.color = warningColor;
+    }
+
+}
+
+function changeAstroResources(oxygen, power, shield) {
+    astroResources.oxygen = Math.max(
+        0, Math.min(100, astroResources.oxygen + oxygen)
+    );
+
+    astroResources.power = Math.max(
+        0, Math.min(100, astroResources.power + power)
+    );
+
+    astroResources.shield = Math.max(
+        0, Math.min(100, astroResources.shield + shield)
+    );
+
+    updateAstroResources();
+}
+
+function resetAstroResources() {
+    astroResources = {
+        oxygen: 100,
+        power: 100,
+        shield: 100
+    };
+
+    updateAstroResources();
+}
+
+updateAstroResources();
+
+// ASTROQUEST MISSION EQUIPMENT
+
+let simulationPowerUsed = false;
+
+function activateSimulationEquipment() {
+    const message = document.getElementById("equipmentMessage");
+
+    if (simulationPowerUsed) {
+        message.textContent = "⚠️ Equipment has already been activated!";
+        return;
+    }
+
+    if (astroResources.power < 10) {
+        message.textContent = "⚠️ Not enough power to activate equipment!";
+        return;
+    }
+
+    changeAstroResources(0, -10, 0);
+
+    simulationPowerUsed = true;
+
+    message.textContent =
+        "✅ Equipment activated! 10% power consumed.";
+}
+// 🚨 ASTROQUEST RANDOM SPACE EMERGENCIES
+
+let emergencyQuestionsSeen = [];
+
+function triggerRandomSpaceEmergency() {
+
+    // Only a 20% chance of an emergency
+    if (Math.random() > 0.20) return;
+
+    const emergencies = [
+        {
+            title: "☄️ METEOROID ALERT!",
+            message: "A meteoroid shower has been detected nearby!",
+            oxygen: -5,
+            power: -5,
+            shield: -10
+        },
+        {
+            title: "⚡ POWER SYSTEM WARNING!",
+            message: "An electrical system malfunction has occurred!",
+            oxygen: 0,
+            power: -10,
+            shield: 0
+        },
+        {
+            title: "🫧 OXYGEN LEAK ALERT!",
+            message: "A small pressure leak has been detected!",
+            oxygen: -10,
+            power: 0,
+            shield: 0
+        },
+        {
+            title: "☀️ SOLAR RADIATION WARNING!",
+            message: "Increased solar activity detected! Shield protection is needed.",
+            oxygen: 0,
+            power: 0,
+            shield: -10
+        }
+    ];
+
+    const emergency = emergencies[
+        Math.floor(Math.random() * emergencies.length)
+    ];
+
+    changeAstroResources(
+        emergency.oxygen,
+        emergency.power,
+        emergency.shield
+    );
+
+    // Show the animated emergency popup
+    document.getElementById("emergencyTitle").textContent =
+        emergency.title;
+
+    document.getElementById("emergencyMessage").textContent =
+        emergency.message;
+
+    document.getElementById("emergencyResourceChanges").innerHTML =
+        "🫧 Oxygen: " + emergency.oxygen + "%<br>" +
+        "⚡ Power: " + emergency.power + "%<br>" +
+        "🛡️ Shield: " + emergency.shield + "%";
+    // Reset emergency choices for the next emergency
+    document.getElementById("emergencyChoices").style.display = "block";
+
+    const continueButton = document.querySelector(
+        "#spaceEmergencyPopup .emergency-card > button"
+    );
+
+    continueButton.textContent = "UNDERSTOOD ✓";
+    document.getElementById("spaceEmergencyPopup")
+        .classList.add("active");
+    playEmergencySound();
+}
+function closeSpaceEmergency() {
+    document.getElementById("spaceEmergencyPopup")
+        .classList.remove("active");
+}
+// ASTROQUEST EMERGENCY SOUND
+
+function playEmergencySound() {
+    const audioContext = new (
+        window.AudioContext || window.webkitAudioContext
+    )();
+
+    const oscillator = audioContext.createOscillator();
+    const gain = audioContext.createGain();
+
+    oscillator.connect(gain);
+    gain.connect(audioContext.destination);
+
+    oscillator.type = "sawtooth";
+    oscillator.frequency.setValueAtTime(
+        750,
+        audioContext.currentTime
+    );
+
+    oscillator.frequency.setValueAtTime(
+        950,
+        audioContext.currentTime + 0.2
+    );
+
+    gain.gain.setValueAtTime(
+        0.12,
+        audioContext.currentTime
+    );
+
+    gain.gain.exponentialRampToValueAtTime(
+        0.01,
+        audioContext.currentTime + 0.5
+    );
+
+    oscillator.start();
+    oscillator.stop(audioContext.currentTime + 0.5);
+}
+// ASTROQUEST EMERGENCY DECISIONS
+
+function handleEmergencyChoice(choice) {
+
+    const emergencyMessage =
+        document.getElementById("emergencyMessage");
+
+    if (choice === 0) {
+
+        // Activate protection
+        changeAstroResources(0, -10, 10);
+
+        emergencyMessage.textContent =
+            "🛡️ Protection activated! Power was used to improve shielding.";
+
+    } else if (choice === 1) {
+
+        // Save power, but accept reduced protection
+        changeAstroResources(0, 0, -10);
+
+        emergencyMessage.textContent =
+            "⚡ You saved power, but shielding protection decreased.";
+
+    }
+
+    document.getElementById("emergencyChoices").style.display =
+        "none";
+
+    document.getElementById("emergencyResourceChanges").textContent =
+        "Your updated resources have been applied!";
+
+    const buttons = document.querySelectorAll(
+        "#spaceEmergencyPopup .emergency-card > button"
+    );
+
+    buttons[0].textContent = "CONTINUE MISSION ✓";
+}

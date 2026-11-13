@@ -3386,3 +3386,145 @@ body.mission-bg-9::after {
         transform: translate(-50%, 0);
     }
 }
+
+/* ASTROQUEST RESOURCE PANEL */
+.astro-resource-panel {
+    width: min(90%, 650px);
+    margin: 20px auto;
+    padding: 18px;
+    background: rgba(8, 20, 48, 0.9);
+    border: 1px solid #36d9ff;
+    border-radius: 18px;
+    color: white;
+    box-shadow: 0 0 18px rgba(54, 217, 255, 0.2);
+}
+
+.astro-resource-panel h3 {
+    text-align: center;
+    color: #54eaff;
+    margin: 0 0 18px;
+    letter-spacing: 2px;
+}
+
+.resource-item {
+    margin: 14px 0;
+}
+
+.resource-heading {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 7px;
+    font-size: 14px;
+}
+
+.resource-track {
+    height: 12px;
+    overflow: hidden;
+    background: #182b48;
+    border-radius: 20px;
+}
+
+.resource-fill {
+    height: 100%;
+    width: 100%;
+    border-radius: 20px;
+    transition: width 0.4s ease;
+}
+
+.oxygen-fill {
+    background: #39e6c0;
+}
+
+.power-fill {
+    background: #ffd34e;
+}
+
+.shield-fill {
+    background: #a78bfa;
+}
+
+#resourceWarning {
+    text-align: center;
+    color: #8fffdc;
+    font-size: 13px;
+    margin: 14px 0 0;
+}
+
+/* ASTROQUEST SPACE EMERGENCY POPUP */
+
+.emergency-popup {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 99999;
+    background: rgba(2, 5, 25, 0.88);
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.emergency-popup.active {
+    display: flex;
+}
+
+.emergency-card {
+    width: 100%;
+    max-width: 420px;
+    padding: 30px;
+    text-align: center;
+    color: white;
+    background: linear-gradient(145deg, #151d45, #32144f);
+    border: 2px solid #ff5364;
+    border-radius: 22px;
+    box-shadow: 0 0 35px rgba(255, 60, 90, 0.5);
+    animation: emergencyAppear 0.4s ease;
+}
+
+.emergency-icon {
+    font-size: 55px;
+    animation: emergencyPulse 1s infinite;
+}
+
+.emergency-card h2 {
+    color: #ff6575;
+    margin: 15px 0;
+}
+
+.emergency-card p {
+    line-height: 1.6;
+}
+
+#emergencyResourceChanges {
+    margin: 18px 0;
+    color: #8fffdc;
+    line-height: 1.8;
+}
+
+.emergency-card button {
+    padding: 12px 25px;
+    border: none;
+    border-radius: 12px;
+    background: #ff5364;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+@keyframes emergencyAppear {
+    from {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes emergencyPulse {
+    50% {
+        transform: scale(1.15);
+    }
+}
