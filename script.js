@@ -309,7 +309,14 @@ function saveProgress() {
 
 function showPage(id) {
     document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
-    document.getElementById(id).classList.add("active");
+    const targetPage = document.getElementById(id);
+
+    if (!targetPage) {
+        console.error("Page not found:", id);
+        return;
+    }
+
+    targetPage.classList.add("active");
 
     if (id === "missionsPage") renderMissions();
     if (id === "reportPage") renderReport();
@@ -407,20 +414,35 @@ function renderMissions() {
 // QUIZ ENGINE
 // ============================================
 
+
 function startMission(index) {
     if (!isUnlocked(index)) return;
-
+    window.showSpaceAlert("🚀 Mission " + (index + 1) + " started!");
+    // Reset mission progress for the new attempt
     currentMission = index;
     currentQuestion = 0;
     currentScore = 0;
     currentCorrect = 0;
     lastResults = null;
 
-    showPage("quizPage");
-    loadQuestion();
+    // Start the countdown before opening the quiz
+    if (typeof window.startMissionCountdown === "function") {
+        window.startMissionCountdown(() => {
+            window.showMissionTravelScene(() => {
+                showPage("quizPage");
+                loadQuestion();
+            });
+        });
+    } else {
+        // Fallback if countdown is unavailable
+        showPage("quizPage");
+        loadQuestion();
+    }
 }
 
+
 function loadQuestion() {
+    updateMissionControl();
     const backgroundClasses = [
         "mission-bg-1",
         "mission-bg-2",
@@ -535,14 +557,23 @@ function checkAnswer(selected) {
         if (index === selected && selected !== correct) button.classList.add("wrong");
     });
 
+
     if (selected === correct) {
         currentCorrect++;
         currentScore += 5;
+
         feedback.textContent = "✓ CORRECT! " + question[3];
         feedback.classList.add("good");
+
+        // SHOW CORRECT ANSWER ALERT
+        window.showSpaceAlert("⭐ Excellent! Correct answer!");
+
     } else {
         feedback.textContent = "✕ Not quite. " + question[3];
         feedback.classList.add("bad");
+
+        // SHOW INCORRECT ANSWER ALERT
+        window.showSpaceAlert("⚠️ Not quite! Try the next question!");
     }
 
     document.getElementById("quizScore").textContent = currentScore;
@@ -605,13 +636,22 @@ function finishMission() {
     };
 
     showResults(lastResults);
+    window.showSpaceAlert("🏆 Mission completed! Great work, astronaut!");
+    if (typeof window.playSpaceSound === "function") {
+        window.playSpaceSound("success");
+    }
+    if (typeof window.showSpaceCelebration === "function") {
+        window.showSpaceCelebration();
+    }
 
-    // Show the story after the results screen.
+
+    // Start the bonus adventure after mission results.
     setTimeout(() => {
-        if (passed) {
-            showStoryScene(currentMission === 8 ? 8 : currentMission);
+        if (typeof window.startPostMissionAdventure === "function") {
+            window.startPostMissionAdventure();
         }
     }, 1200);
+
 }
 
 function showResults(result) {
@@ -848,3 +888,1291 @@ function showStoryScene(completedMissionIndex) {
         overlay.remove();
     });
 }
+
+/* ===== EXTRA SPACE ADVENTURE EFFECTS ===== */
+
+(function createGalaxyUpgrade() {
+
+    function startGalaxy() {
+
+        // Create ASTRO companion
+        const buddy = document.createElement("button");
+        buddy.id = "astro-buddy";
+        buddy.textContent = "🤖";
+        buddy.setAttribute("aria-label", "Talk to ASTRO");
+
+        const message = document.createElement("div");
+        message.id = "astro-message";
+
+        const astroMessages = [
+            "Hello, Space Explorer! Ready for an adventure? 🚀",
+            "Fun fact: Jupiter is the largest planet in our Solar System! 🪐",
+            "You're doing amazing! Keep discovering! ⭐",
+            "Remember: astronauts train hard before going to space! 👩‍🚀",
+            "Be curious, be brave, and explore the universe! 🌌",
+            "Psst... I think there's something amazing waiting in space! ✨"
+        ];
+
+        let messageIndex = 0;
+
+        buddy.addEventListener("click", () => {
+            message.textContent = astroMessages[messageIndex];
+            message.classList.add("visible");
+
+            messageIndex = (messageIndex + 1) % astroMessages.length;
+        });
+
+        document.body.appendChild(message);
+        document.body.appendChild(buddy);
+    }
+
+    if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", startGalaxy);
+    } else {
+        startGalaxy();
+    }
+
+})();
+
+/* ===== ASTRONAUT ID CARD ===== */
+
+(function createAstronautID() {
+
+    if (document.getElementById("astronaut-id-button")) return;
+
+    const openButton = document.createElement("button");
+    openButton.id = "astronaut-id-button";
+    openButton.textContent = "🪪 My ID";
+
+    const missionsPage = document.getElementById("missionsPage");
+
+    if (missionsPage) {
+        missionsPage.appendChild(openButton);
+    }
+
+    function getPlayerStats() {
+        const progress = typeof saved !== "undefined" ? saved : {};
+
+        const results = progress.results || {};
+        const completed = Object.values(results)
+            .filter(result => result && result.passed).length;
+
+        const stars = progress.totalStars || 0;
+
+        let rank = "Space Cadet";
+
+        if (completed >= 9) {
+            rank = "Junior Astronaut 🏆";
+        } else if (completed >= 6) {
+            rank = "Galaxy Explorer 🌌";
+        } else if (completed >= 3) {
+            rank = "Moon Explorer 🌙";
+        } else if (completed >= 1) {
+            rank = "Rookie Astronaut 🚀";
+        }
+
+        return { completed, stars, rank };
+    }
+
+    openButton.addEventListener("click", () => {
+
+        const oldOverlay = document.getElementById(
+            "astronaut-id-overlay"
+        );
+
+        if (oldOverlay) oldOverlay.remove();
+
+        const stats = getPlayerStats();
+
+        const overlay = document.createElement("div");
+        overlay.id = "astronaut-id-overlay";
+
+        const card = document.createElement("div");
+        card.className = "astronaut-id-card";
+
+        card.innerHTML = `
+            <h2>JUNIOR ASTRONAUT ID</h2>
+            <div class="astronaut-id-avatar">👩‍🚀</div>
+
+            <p>SPACE EXPLORER</p>
+
+            <input
+                id="astronaut-player-name"
+                type="text"
+                maxlength="24"
+                placeholder="Enter your astronaut name"
+            >
+
+            <div class="astronaut-id-stats">
+                <div class="astronaut-id-stat">
+                    <strong>🚀 Missions</strong>
+                    <p>${stats.completed} / 9</p>
+                </div>
+
+                <div class="astronaut-id-stat">
+                    <strong>⭐ Stars</strong>
+                    <p>${stats.stars}</p>
+                </div>
+            </div>
+
+            <h3>${stats.rank}</h3>
+
+            <p>🌌 Official Space Explorer</p>
+
+            <button id="save-astronaut-name">Save Name</button>
+            <button id="close-astronaut-id">Close</button>
+        `;
+
+        overlay.appendChild(card);
+        document.body.appendChild(overlay);
+
+        const nameInput = card.querySelector(
+            "#astronaut-player-name"
+        );
+
+        nameInput.value = localStorage.getItem(
+            "astronautPlayerName"
+        ) || "";
+
+        card.querySelector("#save-astronaut-name")
+            .addEventListener("click", () => {
+
+                const name = nameInput.value.trim();
+
+                if (!name) {
+                    nameInput.placeholder = "Please enter a name!";
+                    return;
+                }
+
+                localStorage.setItem("astronautPlayerName", name);
+
+                card.querySelector("h2").textContent =
+                    name.toUpperCase() + "'S ID 🚀";
+            });
+
+        card.querySelector("#close-astronaut-id")
+            .addEventListener("click", () => overlay.remove());
+
+        overlay.addEventListener("click", event => {
+            if (event.target === overlay) overlay.remove();
+        });
+    });
+
+})();
+
+/* ===== INTERACTIVE GALAXY MISSION MAP ===== */
+
+(function createGalaxyMissionMap() {
+
+    if (document.getElementById("galaxy-map-button")) return;
+
+    const planets = [
+        { name: "Earth", icon: "🌍", detail: "Your home planet. Begin your astronaut journey here!" },
+        { name: "Moon", icon: "🌙", detail: "Discover Earth's natural satellite." },
+        { name: "Mars", icon: "🔴", detail: "Explore the mysterious Red Planet." },
+        { name: "Jupiter", icon: "🪐", detail: "Meet the giant planet of our Solar System." },
+        { name: "Saturn", icon: "💫", detail: "Discover the beautiful rings of Saturn." },
+        { name: "Sun", icon: "☀️", detail: "Learn about the star at the centre of our Solar System." },
+        { name: "Venus", icon: "🟠", detail: "Explore the hottest planet in our Solar System." },
+        { name: "Neptune", icon: "🔵", detail: "Travel to a distant icy giant." },
+        { name: "Galaxy", icon: "🌌", detail: "Complete your final space adventure!" }
+    ];
+
+    const openButton = document.createElement("button");
+    openButton.id = "galaxy-map-button";
+    openButton.textContent = "🪐 Mission Map";
+    const missionsPage = document.getElementById("missionsPage");
+
+    if (missionsPage) {
+        missionsPage.appendChild(openButton);
+    }
+
+    openButton.addEventListener("click", showGalaxyMap);
+
+    function showGalaxyMap() {
+
+        const oldOverlay = document.getElementById("galaxy-map-overlay");
+        if (oldOverlay) oldOverlay.remove();
+
+        const progress = typeof saved !== "undefined" ? saved : {};
+        const unlocked = progress.unlocked || [0];
+        const results = progress.results || {};
+
+        const overlay = document.createElement("div");
+        overlay.id = "galaxy-map-overlay";
+
+        const panel = document.createElement("div");
+        panel.className = "galaxy-map-panel";
+
+        const heading = document.createElement("h2");
+        heading.textContent = "🌌 YOUR GALAXY JOURNEY";
+
+        const subtitle = document.createElement("p");
+        subtitle.textContent = "Explore the universe, one mission at a time!";
+
+        const grid = document.createElement("div");
+        grid.className = "galaxy-map-grid";
+
+        const detail = document.createElement("div");
+        detail.id = "galaxy-map-detail";
+        detail.textContent = "Choose a planet to discover its mission.";
+
+        planets.forEach((planet, index) => {
+
+            const result = results[index];
+            const completed = Boolean(result && result.passed);
+            const isUnlocked = unlocked.includes(index);
+
+            const card = document.createElement("button");
+            card.className = "galaxy-planet";
+
+            if (!isUnlocked) {
+                card.classList.add("locked");
+            }
+
+            if (completed) {
+                card.classList.add("completed");
+            }
+
+            const icon = document.createElement("span");
+            icon.className = "galaxy-planet-icon";
+            icon.textContent = planet.icon;
+
+            const name = document.createElement("strong");
+            name.textContent = planet.name;
+
+            const status = document.createElement("small");
+            status.textContent = completed
+                ? "✅ Completed"
+                : isUnlocked
+                    ? "🚀 Unlocked"
+                    : "🔒 Locked";
+
+            card.appendChild(icon);
+            card.appendChild(name);
+            card.appendChild(status);
+
+            card.addEventListener("click", () => {
+                if (!isUnlocked) {
+                    detail.textContent =
+                        "🔒 Complete the previous mission with at least 16/20 to unlock this destination.";
+                    return;
+                }
+
+                detail.textContent =
+                    planet.icon + " " + planet.name + ": " + planet.detail;
+            });
+
+            grid.appendChild(card);
+        });
+
+        const closeButton = document.createElement("button");
+        closeButton.id = "close-galaxy-map";
+        closeButton.textContent = "Back to Game 🚀";
+        closeButton.addEventListener("click", () => overlay.remove());
+
+        panel.appendChild(heading);
+        panel.appendChild(subtitle);
+        panel.appendChild(grid);
+        panel.appendChild(detail);
+        panel.appendChild(closeButton);
+
+        overlay.appendChild(panel);
+        document.body.appendChild(overlay);
+
+        overlay.addEventListener("click", event => {
+            if (event.target === overlay) overlay.remove();
+        });
+    }
+
+})();
+
+/* ===== SPACE SOUND SYSTEM ===== */
+
+(function createSpaceSoundSystem() {
+
+    if (document.getElementById("space-sound-button")) return;
+
+    let soundEnabled = false;
+    let audioContext = null;
+
+    const soundButton = document.createElement("button");
+    soundButton.id = "space-sound-button";
+    soundButton.textContent = "🔇 Sound OFF";
+
+    document.body.appendChild(soundButton);
+
+    function getAudioContext() {
+        const AudioClass = window.AudioContext || window.webkitAudioContext;
+
+        if (!AudioClass) return null;
+
+        if (!audioContext) {
+            audioContext = new AudioClass();
+        }
+
+        if (audioContext.state === "suspended") {
+            audioContext.resume();
+        }
+
+        return audioContext;
+    }
+
+    function playTone(frequency, duration, type = "sine") {
+        if (!soundEnabled) return;
+
+        const context = getAudioContext();
+        if (!context) return;
+
+        const oscillator = context.createOscillator();
+        const volume = context.createGain();
+
+        oscillator.type = type;
+        oscillator.frequency.value = frequency;
+
+        volume.gain.setValueAtTime(0.12, context.currentTime);
+        volume.gain.exponentialRampToValueAtTime(
+            0.001,
+            context.currentTime + duration
+        );
+
+        oscillator.connect(volume);
+        volume.connect(context.destination);
+
+        oscillator.start();
+        oscillator.stop(context.currentTime + duration);
+    }
+
+    window.playSpaceSound = function (type) {
+        if (!soundEnabled) return;
+
+        if (type === "click") {
+            playTone(650, 0.12);
+        }
+
+        if (type === "launch") {
+            playTone(180, 0.6, "sawtooth");
+            setTimeout(() => playTone(420, 0.5), 250);
+        }
+
+        if (type === "success") {
+            playTone(523, 0.2);
+            setTimeout(() => playTone(659, 0.2), 180);
+            setTimeout(() => playTone(784, 0.4), 360);
+        }
+    };
+
+    soundButton.addEventListener("click", () => {
+        soundEnabled = !soundEnabled;
+
+        soundButton.textContent = soundEnabled
+            ? "🔊 Sound ON"
+            : "🔇 Sound OFF";
+
+        if (soundEnabled) {
+            getAudioContext();
+            playTone(523, 0.2);
+        }
+    });
+
+})();
+
+/* ===== MISSION COUNTDOWN SYSTEM ===== */
+
+window.startMissionCountdown = function (callback) {
+
+    // Prevent multiple countdowns
+    if (document.getElementById("launch-countdown")) return;
+
+    const overlay = document.createElement("div");
+    overlay.id = "launch-countdown";
+
+    const content = document.createElement("div");
+    content.className = "launch-content";
+
+    const scene = document.createElement("div");
+    scene.className = "launch-scene";
+    scene.innerHTML = `
+    <div class="launch-stars">✨ · ⭐ · ✨</div>
+    <div class="launch-planet">🌍</div>
+    <div class="launch-rocket">🚀</div>
+    <div class="launch-smoke">☁️ ☁️ ☁️</div>
+`;
+
+    const heading = document.createElement("h2");
+    heading.textContent = "🚀 MISSION LAUNCH";
+
+    const number = document.createElement("div");
+    number.className = "launch-number";
+
+    const message = document.createElement("p");
+    message.className = "launch-message";
+    message.textContent = "Prepare your astronaut suit!";
+    content.appendChild(scene);
+    content.appendChild(heading);
+    content.appendChild(number);
+    content.appendChild(message);
+    overlay.appendChild(content);
+    document.body.appendChild(overlay);
+
+    let count = 3;
+
+    function updateCountdown() {
+        if (!overlay.isConnected) return;
+
+        if (count > 0) {
+            number.textContent = count;
+            number.style.animation = "none";
+            void number.offsetWidth;
+            number.style.animation = "launchPop 0.8s ease";
+
+            if (typeof window.playSpaceSound === "function") {
+                window.playSpaceSound("click");
+            }
+
+            count--;
+            setTimeout(updateCountdown, 1000);
+
+        } else {
+            number.textContent = "🚀";
+            message.textContent = "LIFTOFF!";
+            overlay.classList.add("launch-countdown-go");
+
+            if (typeof window.playSpaceSound === "function") {
+                window.playSpaceSound("launch");
+            }
+
+            setTimeout(() => {
+                overlay.remove();
+
+                if (typeof callback === "function") {
+                    callback();
+                }
+            }, 4200);
+        }
+    }
+
+    updateCountdown();
+};
+
+// UPDATE MISSION CONTROL DASHBOARD
+function updateMissionControl() {
+    const missionNumber = document.getElementById("control-mission");
+    const progressFill = document.getElementById("control-progress-fill");
+
+    if (!missionNumber || !progressFill) return;
+
+    // Display mission number
+    missionNumber.textContent = String(currentMission + 1).padStart(2, "0");
+
+    // Calculate quiz progress
+    const progress = Math.min((currentQuestion / 20) * 100, 100);
+
+    progressFill.style.width = progress + "%";
+}
+
+/* SPACE MISSION ALERT SYSTEM */
+window.showSpaceAlert = function (message) {
+    let alertBox = document.getElementById("space-alert");
+
+    if (!alertBox) {
+        alertBox = document.createElement("div");
+        alertBox.id = "space-alert";
+        document.body.appendChild(alertBox);
+    }
+
+    alertBox.textContent = message;
+    alertBox.classList.add("show");
+
+    clearTimeout(window.spaceAlertTimer);
+
+    window.spaceAlertTimer = setTimeout(() => {
+        alertBox.classList.remove("show");
+    }, 2200);
+};
+
+/* ===== ALIEN SIGNAL CHALLENGE ===== */
+
+(function createAlienSignal() {
+
+    if (document.getElementById("alien-signal-button")) return;
+
+    const questions = [
+        {
+            question: "Which planet is known as the Red Planet?",
+            options: ["Venus", "Mars", "Jupiter"],
+            answer: 1
+        },
+        {
+            question: "Which planet has the most famous ring system?",
+            options: ["Saturn", "Earth", "Mercury"],
+            answer: 0
+        },
+        {
+            question: "What is the name of our galaxy?",
+            options: ["Andromeda", "Milky Way", "Whirlpool"],
+            answer: 1
+        },
+        {
+            question: "Which star is closest to Earth?",
+            options: ["Sirius", "Polaris", "The Sun"],
+            answer: 2
+        },
+        {
+            question: "What do astronauts wear outside their spacecraft?",
+            options: ["Space suit", "Raincoat", "Winter jacket"],
+            answer: 0
+        }
+    ];
+
+    const button = document.createElement("button");
+    button.id = "alien-signal-button";
+    button.textContent = "🛸 Alien Signal";
+
+    document.body.appendChild(button);
+
+    let currentQuestion = null;
+    let answered = false;
+
+    button.addEventListener("click", openChallenge);
+
+    function openChallenge() {
+        if (document.getElementById("alien-signal-overlay")) return;
+
+        answered = false;
+
+        currentQuestion =
+            questions[Math.floor(Math.random() * questions.length)];
+
+        const overlay = document.createElement("div");
+        overlay.id = "alien-signal-overlay";
+
+        const card = document.createElement("div");
+        card.className = "alien-signal-card";
+
+        card.innerHTML = `
+            <h2>🛸 MYSTERIOUS SIGNAL</h2>
+            <p>We received a message from deep space!</p>
+            <h3>${currentQuestion.question}</h3>
+            <div class="alien-signal-options"></div>
+            <p id="alien-signal-feedback"></p>
+            <p id="alien-signal-xp">
+                Your XP: ${Number(localStorage.getItem("juniorAstronautXP")) || 0}
+            </p>
+            <button id="alien-signal-close">Close Signal</button>
+        `;
+
+        overlay.appendChild(card);
+        document.body.appendChild(overlay);
+
+        const options = card.querySelector(".alien-signal-options");
+
+        currentQuestion.options.forEach((option, index) => {
+            const choice = document.createElement("button");
+            choice.textContent = option;
+
+            choice.addEventListener("click", () => {
+                if (answered) return;
+
+                answered = true;
+
+                const feedback =
+                    card.querySelector("#alien-signal-feedback");
+
+                if (index === currentQuestion.answer) {
+                    const oldXP =
+                        Number(localStorage.getItem("juniorAstronautXP")) || 0;
+
+                    const newXP = oldXP + 10;
+
+                    localStorage.setItem(
+                        "juniorAstronautXP",
+                        newXP
+                    );
+
+                    feedback.textContent = "⭐ Correct! +10 XP earned!";
+                    card.querySelector("#alien-signal-xp").textContent =
+                        "Your XP: " + newXP;
+                } else {
+                    feedback.textContent =
+                        "📡 Signal incorrect! Try another challenge!";
+                }
+
+                options.querySelectorAll("button").forEach(btn => {
+                    btn.disabled = true;
+                });
+            });
+
+            options.appendChild(choice);
+        });
+
+        card.querySelector("#alien-signal-close")
+            .addEventListener("click", () => overlay.remove());
+
+        overlay.addEventListener("click", event => {
+            if (event.target === overlay) overlay.remove();
+        });
+    }
+
+})();
+
+/* ===== INTERACTIVE SPACESHIP COCKPIT ===== */
+
+(function createSpaceCockpit() {
+
+    if (document.getElementById("space-cockpit-button")) return;
+
+    const openButton = document.createElement("button");
+    openButton.id = "space-cockpit-button";
+    openButton.textContent = "🛰️ Cockpit";
+
+    const missionsPage = document.getElementById("missionsPage");
+
+    if (missionsPage) {
+        missionsPage.appendChild(openButton);
+    }
+
+    openButton.addEventListener("click", openCockpit);
+
+    function openCockpit() {
+
+        if (document.getElementById("space-cockpit-overlay")) return;
+
+        const overlay = document.createElement("div");
+        overlay.id = "space-cockpit-overlay";
+
+        const panel = document.createElement("div");
+        panel.className = "space-cockpit-panel";
+
+        panel.innerHTML = `
+            <h2>🚀 SPACESHIP COCKPIT</h2>
+            <p class="cockpit-subtitle">JUNIOR ASTRONAUT COMMAND CENTER</p>
+
+            <div class="cockpit-radar">
+                <div class="radar-ring"></div>
+                <div class="radar-ring"></div>
+                <div class="radar-ring"></div>
+                <div class="radar-sweep"></div>
+                <span class="radar-ship">🚀</span>
+            </div>
+
+            <div class="cockpit-status">
+                <div>
+                    <span>ENGINE</span>
+                    <strong id="engine-status">STANDBY</strong>
+                </div>
+                <div>
+                    <span>SHIELDS</span>
+                    <strong>ONLINE</strong>
+                </div>
+                <div>
+                    <span>RADAR</span>
+                    <strong>ACTIVE</strong>
+                </div>
+            </div>
+
+            <div class="cockpit-controls">
+                <button id="engine-button">⚡ Start Engine</button>
+                <button id="radar-button">📡 Scan Space</button>
+            </div>
+
+            <p id="cockpit-message">
+                Welcome, Commander! Systems are ready.
+            </p>
+
+            <button id="cockpit-close">Close Cockpit</button>
+        `;
+
+        overlay.appendChild(panel);
+        document.body.appendChild(overlay);
+
+        let engineOn = false;
+
+        panel.querySelector("#engine-button")
+            .addEventListener("click", () => {
+
+                engineOn = !engineOn;
+
+                panel.querySelector("#engine-status").textContent =
+                    engineOn ? "RUNNING" : "STANDBY";
+
+                panel.querySelector("#engine-button").textContent =
+                    engineOn ? "⏹ Stop Engine" : "⚡ Start Engine";
+
+                panel.querySelector("#cockpit-message").textContent =
+                    engineOn
+                        ? "🚀 Engines running! Ready for exploration."
+                        : "Engine stopped. Systems in standby.";
+            });
+
+        panel.querySelector("#radar-button")
+            .addEventListener("click", () => {
+
+                panel.querySelector("#cockpit-message").textContent =
+                    "📡 Radar scan complete! Space signals detected.";
+            });
+
+        panel.querySelector("#cockpit-close")
+            .addEventListener("click", () => overlay.remove());
+
+        overlay.addEventListener("click", event => {
+            if (event.target === overlay) overlay.remove();
+        });
+    }
+
+})();
+
+/* ===== CRYSTAL RUSH ADVENTURE GAME ===== */
+
+window.startPostMissionAdventure = function () {
+    if (document.getElementById("adventure-overlay")) return;
+
+    let collected = 0;
+
+    const overlay = document.createElement("div");
+    overlay.id = "adventure-overlay";
+
+    overlay.innerHTML = `
+        <div class="adventure-card">
+            <h2>🌌 CRYSTAL RUSH</h2>
+            <p>
+                Astronaut, your spaceship needs energy!
+                Collect all 5 crystals to activate the
+                mysterious planet's energy core.
+            </p>
+
+            <div id="adventure-progress">
+                Crystals: 0 / 5
+            </div>
+
+            <div id="adventure-crystals">
+                ${Array.from({ length: 5 }, (_, i) =>
+        `<button class="adventure-crystal"
+                    data-crystal="${i}"
+                    aria-label="Collect crystal ${i + 1}">💎</button>`
+    ).join("")}
+            </div>
+
+            <p id="adventure-message">
+                Tap the crystals to collect them!
+            </p>
+
+            <button id="adventure-close" disabled>
+                Complete the challenge first
+            </button>
+        </div>
+    `;
+
+    document.body.appendChild(overlay);
+
+    const crystals = overlay.querySelectorAll(".adventure-crystal");
+    const progress = overlay.querySelector("#adventure-progress");
+    const message = overlay.querySelector("#adventure-message");
+    const closeButton = overlay.querySelector("#adventure-close");
+
+    crystals.forEach(crystal => {
+        crystal.addEventListener("click", () => {
+            if (crystal.classList.contains("collected")) return;
+
+            crystal.classList.add("collected");
+            crystal.disabled = true;
+            crystal.textContent = "✨";
+
+            collected++;
+            progress.textContent = `Crystals: ${collected} / 5`;
+
+            if (collected < 5) {
+                message.textContent = "✨ Great! Find the remaining crystals!";
+            } else {
+                message.textContent =
+                    "🏆 ENERGY CORE ACTIVATED! You earned 20 bonus XP!";
+
+                const oldXP = Number(
+                    localStorage.getItem("juniorAstronautXP") || 0
+                );
+
+                localStorage.setItem(
+                    "juniorAstronautXP",
+                    oldXP + 20
+                );
+
+                closeButton.disabled = false;
+                closeButton.textContent = "🚀 Return to Mission Results";
+            }
+        });
+    });
+
+
+    closeButton.addEventListener("click", () => {
+        if (collected === 5) {
+            overlay.remove();
+
+            if (lastResults && lastResults.passed) {
+                showStoryScene(currentMission === 8 ? 8 : currentMission);
+            }
+        }
+    });
+
+};
+
+
+/* ===== OPENING STORY NAVIGATION ===== */
+
+document.getElementById("openingNextButton")?.addEventListener("click", () => {
+    showPage("missionsPage");
+});
+
+/* ===== ROCKET RACING GAME ENGINE ===== */
+
+(function createRocketRacing() {
+
+    const arena = document.getElementById("race-arena");
+    const player = document.getElementById("race-player");
+    const startButton = document.getElementById("race-start");
+
+    if (!arena || !player || !startButton) {
+        console.error("Rocket Racing HTML elements not found!");
+        return;
+    }
+
+    let running = false;
+    let position = 50;
+    let score = 0;
+    let lives = 3;
+    let time = 0;
+    let gameTimer = null;
+    let spawnTimer = null;
+    let objects = [];
+    let keys = {};
+
+    function updateHUD() {
+        document.getElementById("race-score").textContent = score;
+        document.getElementById("race-lives").textContent = lives;
+        document.getElementById("race-time").textContent = time;
+    }
+
+    function movePlayer(direction) {
+        if (!running) return;
+
+        const rocketSpeed = Number(player.dataset.speed) || 5;
+        position += direction * rocketSpeed;
+        position = Math.max(7, Math.min(93, position));
+
+        player.style.left = position + "%";
+    }
+
+    function spawnObject() {
+        if (!running) return;
+
+        const isCrystal = Math.random() < 0.3;
+        const object = document.createElement("div");
+
+        object.className = isCrystal ? "race-crystal" : "race-asteroid";
+        object.textContent = isCrystal ? "💎" : "☄️";
+
+        const objectPosition = Math.random() * 85 + 5;
+
+        object.style.left = objectPosition + "%";
+        object.style.top = "-45px";
+
+        arena.appendChild(object);
+
+        objects.push({
+            element: object,
+            x: objectPosition,
+            y: -45,
+            crystal: isCrystal
+        });
+    }
+
+    function finishGame(won) {
+        running = false;
+
+        clearInterval(gameTimer);
+        clearInterval(spawnTimer);
+
+        objects.forEach(object => object.element.remove());
+        objects = [];
+
+        const message = document.getElementById("race-message");
+        message.style.display = "flex";
+
+        message.innerHTML = won
+            ? `<div>🏆 RACE COMPLETED!</div>
+               <p>You collected ${score} points!</p>
+               <button id="race-start">RACE AGAIN 🚀</button>`
+            : `<div>💥 GAME OVER!</div>
+               <p>Final score: ${score}</p>
+               <button id="race-start">TRY AGAIN 🚀</button>`;
+
+        document.getElementById("race-start").addEventListener("click", startGame);
+    }
+
+    function gameLoop() {
+        if (!running) return;
+
+        if (keys.ArrowLeft || keys.a) movePlayer(-1);
+        if (keys.ArrowRight || keys.d) movePlayer(1);
+
+        const playerY = arena.clientHeight - 75;
+
+        objects.forEach((object, index) => {
+            object.y += 4;
+
+            object.element.style.top = object.y + "px";
+
+            const horizontalDistance = Math.abs(object.x - position);
+            const verticalDistance = Math.abs(object.y - playerY);
+
+            if (horizontalDistance < 9 && verticalDistance < 40) {
+                if (object.crystal) {
+                    score += 10;
+                } else {
+                    lives--;
+
+                    arena.classList.remove("race-damaged");
+
+                    void arena.offsetWidth;
+
+                    arena.classList.add("race-damaged");
+
+                }
+
+                object.element.remove();
+                objects.splice(index, 1);
+                updateHUD();
+                return;
+            }
+
+            if (object.y > arena.clientHeight) {
+                object.element.remove();
+                objects.splice(index, 1);
+            }
+        });
+
+        if (lives <= 0) {
+            finishGame(false);
+            return;
+        }
+
+        if (time >= 120) {
+            finishGame(true);
+            return;
+        }
+
+        requestAnimationFrame(gameLoop);
+    }
+
+    function startGame() {
+        if (running) return;
+
+        running = true;
+        position = 50;
+        score = 0;
+        lives = 3;
+        time = 0;
+        objects = [];
+
+        player.style.left = "50%";
+
+        const message = document.getElementById("race-message");
+        message.style.display = "none";
+
+        updateHUD();
+
+        gameTimer = setInterval(() => {
+            if (!running) return;
+            time++;
+            updateHUD();
+        }, 1000);
+
+        spawnTimer = setInterval(spawnObject, 900);
+
+        requestAnimationFrame(gameLoop);
+    }
+
+    startButton.addEventListener("click", startGame);
+
+    document.addEventListener("keydown", event => {
+        if (["ArrowLeft", "ArrowRight"].includes(event.key)) {
+            event.preventDefault();
+        }
+        keys[event.key] = true;
+    });
+
+    document.addEventListener("keyup", event => {
+        keys[event.key] = false;
+    });
+
+    document.getElementById("race-left").addEventListener("click", () => {
+        movePlayer(-1);
+    });
+
+    document.getElementById("race-right").addEventListener("click", () => {
+        movePlayer(1);
+    });
+
+})();
+
+
+/* ===== ROCKET GARAGE FUNCTION ===== */
+
+(function setupRocketGarage() {
+
+    const player = document.getElementById("race-player");
+    const choices = document.querySelectorAll(".rocket-choice");
+
+    if (!player || choices.length === 0) return;
+
+    choices.forEach(button => {
+
+        button.addEventListener("click", function () {
+
+            const selectedRocket = this.dataset.rocket;
+            const selectedSpeed = Number(this.dataset.speed);
+
+            player.textContent = selectedRocket;
+            player.dataset.speed = selectedSpeed;
+
+            choices.forEach(choice => {
+                choice.classList.remove("selected");
+            });
+
+            this.classList.add("selected");
+
+        });
+
+    });
+
+})();
+
+
+/* ===== ALIEN PLANET EXPLORER ===== */
+
+window.openAlienExplorer = function () {
+
+    if (document.getElementById("alien-explorer-overlay")) return;
+
+    let collected = 0;
+
+    const overlay = document.createElement("div");
+    overlay.id = "alien-explorer-overlay";
+
+    overlay.innerHTML = `
+        <div class="alien-explorer-card">
+
+            <h1>👽 MYSTERY PLANET</h1>
+
+            <p>
+                Welcome, astronaut!
+                Explore this mysterious planet
+                and discover its hidden treasures.
+            </p>
+
+            <h3>💎 Find all 3 energy crystals!</h3>
+
+            <div class="alien-planet-area">
+
+<div class="explorer-astronaut">🧑‍🚀</div>
+<div class="roaming-alien">👾</div>
+ 
+
+                <button class="alien-find" data-find="1">💎</button>
+                <button class="alien-find" data-find="2">🪨</button>
+                <button class="alien-find" data-find="3">✨</button>
+
+                <div class="friendly-alien">👽</div>
+
+            </div>
+
+            <h3 id="alien-progress">
+                Treasures found: 0 / 3
+            </h3>
+
+            <p id="alien-message">
+                Tap the objects to discover their secrets!
+            </p>
+
+            <button id="alien-explorer-close">
+                CLOSE EXPLORER
+            </button>
+
+        </div>
+    `;
+
+    document.body.appendChild(overlay);
+
+    const objects = overlay.querySelectorAll(".alien-find");
+    const progress = overlay.querySelector("#alien-progress");
+    const message = overlay.querySelector("#alien-message");
+
+    objects.forEach((object, index) => {
+
+        object.addEventListener("click", () => {
+
+            if (object.disabled) return;
+
+            object.disabled = true;
+            object.classList.add("found");
+
+            const discoveries = [
+                "💎 Energy crystal discovered!",
+                "🪨 Interesting! This could be a meteorite!",
+                "✨ You discovered a mysterious energy source!"
+            ];
+
+            object.textContent = "⭐";
+
+            collected++;
+
+            progress.textContent =
+                "Treasures found: " + collected + " / 3";
+
+            message.textContent = discoveries[index];
+
+            if (collected === 3) {
+
+                const alreadyClaimed =
+                    localStorage.getItem("alienPlanetRewardClaimed");
+
+                if (!alreadyClaimed) {
+
+                    const oldXP = Number(
+                        localStorage.getItem("juniorAstronautXP") || 0
+                    );
+
+                    localStorage.setItem(
+                        "juniorAstronautXP",
+                        oldXP + 15
+                    );
+
+                    localStorage.setItem(
+                        "alienPlanetRewardClaimed",
+                        "true"
+                    );
+
+                    message.textContent =
+                        "🏆 Planet explored! You earned 15 bonus XP!";
+
+                } else {
+
+                    message.textContent =
+                        "🏆 Planet explored! You already claimed your XP reward.";
+
+                }
+
+                progress.textContent = "MISSION COMPLETE! 🏆";
+            }
+
+        });
+
+    });
+
+    overlay.querySelector("#alien-explorer-close")
+        .addEventListener("click", () => {
+            overlay.remove();
+        });
+
+};
+
+/* ===== MISSION DESTINATION CINEMATIC ===== */
+
+window.showMissionTravelScene = function (callback) {
+
+    const destinations = [
+        {
+            name: "JOURNEY TO THE MOON",
+            planet: "🌕",
+            astronaut: "🧑‍🚀",
+            message: "Approaching lunar surface..."
+        },
+        {
+            name: "MARS EXPLORATION",
+            planet: "🔴",
+            astronaut: "🧑‍🚀",
+            message: "Entering the Martian atmosphere..."
+        },
+        {
+            name: "INTERNATIONAL SPACE STATION",
+            planet: "🛰️",
+            astronaut: "👨‍🚀",
+            message: "Preparing for station docking..."
+        },
+        {
+            name: "SOLAR SYSTEM EXPLORER",
+            planet: "🪐",
+            astronaut: "🧑‍🚀",
+            message: "Exploring the solar system..."
+        },
+        {
+            name: "SPACE SURVIVAL",
+            planet: "🌌",
+            astronaut: "🧑‍🚀",
+            message: "Entering deep space..."
+        },
+        {
+            name: "GALAXY SURVIVAL",
+            planet: "✨",
+            astronaut: "🧑‍🚀",
+            message: "Entering a distant galaxy..."
+        },
+        {
+            name: "MISSION UNKNOWN",
+            planet: "👽",
+            astronaut: "🧑‍🚀",
+            message: "An unknown world has been detected..."
+        }
+    ];
+
+    const destination = destinations[currentMission] || destinations[6];
+
+    const overlay = document.createElement("div");
+    overlay.id = "mission-travel-overlay";
+    overlay.classList.add("mission-scene-" + currentMission);
+    overlay.innerHTML = `
+        <div class="travel-scene">
+
+            <div class="travel-stars">✦　✨　✧　⭐　✦</div>
+
+            <div class="travel-heading">
+                ${destination.name}
+            </div>
+
+            <div class="travel-rocket">🚀</div>
+
+            <div class="travel-planet">
+                ${destination.planet}
+            </div>
+
+            <div class="travel-astronaut">
+                ${destination.astronaut}
+            </div>
+
+            <div class="travel-message">
+                ${destination.message}
+            </div>
+
+            <div class="travel-status">
+                DESTINATION APPROACHING...
+            </div>
+<div class="mission-arrival-banner">
+    🏆 DESTINATION REACHED!
+    <span>Astronaut, prepare for exploration!</span>
+</div>
+        </div>
+    `;
+
+    document.body.appendChild(overlay);
+
+    setTimeout(() => {
+        overlay.classList.add("travel-arrived");
+    }, 2000);
+
+    setTimeout(() => {
+        overlay.remove();
+
+        if (typeof callback === "function") {
+            callback();
+        }
+    }, 7500);
+};

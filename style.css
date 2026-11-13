@@ -1469,3 +1469,1920 @@ body.mission-bg-9::after {
     position: relative;
     z-index: 2;
 }
+
+/* ===== LIVING GALAXY EFFECT ===== */
+
+#galaxy-effects {
+    position: fixed;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.galaxy-star {
+    position: absolute;
+    left: var(--star-x);
+    top: var(--star-y);
+    color: #ffffff;
+    font-size: var(--star-size);
+    opacity: 0.3;
+    animation: galaxyTwinkle var(--star-speed) ease-in-out infinite alternate;
+    animation-delay: var(--star-delay);
+}
+
+@keyframes galaxyTwinkle {
+    from {
+        opacity: 0.15;
+        transform: scale(0.7);
+    }
+
+    to {
+        opacity: 0.95;
+        transform: scale(1.3);
+    }
+}
+
+/* ===== ASTRO COMPANION ===== */
+
+#astro-buddy {
+    position: fixed;
+    right: 22px;
+    bottom: 22px;
+    z-index: 100;
+    border: 2px solid #a99aff;
+    border-radius: 50%;
+    width: 65px;
+    height: 65px;
+    background: linear-gradient(135deg, #5144a8, #bd75dc);
+    font-size: 35px;
+    cursor: pointer;
+    box-shadow: 0 0 22px #a68bff99;
+    animation: astroFloat 2s ease-in-out infinite;
+}
+
+#astro-buddy:hover {
+    transform: scale(1.12);
+}
+
+#astro-message {
+    position: fixed;
+    right: 98px;
+    bottom: 32px;
+    z-index: 100;
+    max-width: 230px;
+    padding: 13px 17px;
+    border: 1px solid #a99aff;
+    border-radius: 17px;
+    background: #211d50;
+    color: white;
+    font-size: 13px;
+    line-height: 1.5;
+    box-shadow: 0 0 18px #a68bff66;
+    display: none;
+}
+
+#astro-message.visible {
+    display: block;
+    animation: storyPop 0.3s ease;
+}
+
+@keyframes astroFloat {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-9px);
+    }
+}
+
+/* ===== SPACE POWER-UPS ===== */
+
+.space-collectibles {
+    position: fixed;
+    inset: 0;
+    z-index: 2;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.cosmic-crystal {
+    position: absolute;
+    font-size: 27px;
+    animation: crystalFloat 3s ease-in-out infinite;
+    filter: drop-shadow(0 0 10px #9c8bff);
+}
+
+@keyframes crystalFloat {
+
+    0%,
+    100% {
+        transform: translateY(0) rotate(-12deg);
+    }
+
+    50% {
+        transform: translateY(-18px) rotate(12deg);
+    }
+}
+
+.celebration-particle {
+    position: fixed;
+    z-index: 10001;
+    pointer-events: none;
+    font-size: 24px;
+    animation: celebrationFly 1.5s ease-out forwards;
+}
+
+@keyframes celebrationFly {
+    0% {
+        opacity: 1;
+        transform: translate(0, 0) scale(0.5);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translate(var(--fly-x), var(--fly-y)) scale(1.5);
+    }
+}
+
+/* ===== JUNIOR ASTRONAUT ID CARD ===== */
+
+#astronaut-id-button {
+    position: fixed;
+    right: 98px;
+    bottom: 35px;
+    z-index: 101;
+    padding: 12px 16px;
+    border: 1px solid #a99aff;
+    border-radius: 25px;
+    background: #211d50;
+    color: white;
+    cursor: pointer;
+    box-shadow: 0 0 15px #a68bff66;
+}
+
+#astronaut-id-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background: #050719dd;
+    backdrop-filter: blur(8px);
+}
+
+.astronaut-id-card {
+    width: min(390px, 100%);
+    padding: 25px;
+    border: 2px solid #a99aff;
+    border-radius: 24px;
+    color: white;
+    text-align: center;
+    background: linear-gradient(145deg, #171b48, #39215f);
+    box-shadow: 0 0 35px #9b7bff88;
+    animation: storyPop 0.4s ease;
+}
+
+.astronaut-id-card h2 {
+    color: #ffe58a;
+}
+
+.astronaut-id-avatar {
+    font-size: 65px;
+    margin: 12px;
+    animation: floatAstronaut 2s infinite ease-in-out;
+}
+
+.astronaut-id-card input {
+    width: 90%;
+    padding: 11px;
+    margin: 12px 0;
+    border: 1px solid #a99aff;
+    border-radius: 12px;
+    background: #17183e;
+    color: white;
+    text-align: center;
+}
+
+.astronaut-id-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin: 18px 0;
+}
+
+.astronaut-id-stat {
+    padding: 12px;
+    border-radius: 14px;
+    background: #ffffff16;
+}
+
+.astronaut-id-card button {
+    padding: 11px 20px;
+    margin: 5px;
+    border: none;
+    border-radius: 20px;
+    background: linear-gradient(90deg, #8d7cff, #ed82dc);
+    color: white;
+    cursor: pointer;
+}
+
+/* ===== GALAXY MISSION MAP ===== */
+
+#galaxy-map-button {
+    position: fixed;
+    left: 22px;
+    bottom: 25px;
+    z-index: 101;
+    padding: 12px 17px;
+    border: 1px solid #8f83ff;
+    border-radius: 25px;
+    background: #211d50;
+    color: white;
+    cursor: pointer;
+    box-shadow: 0 0 16px #8f83ff77;
+}
+
+#galaxy-map-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 10002;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 18px;
+    background: #050719ed;
+    backdrop-filter: blur(9px);
+}
+
+.galaxy-map-panel {
+    width: min(850px, 100%);
+    max-height: 90vh;
+    overflow-y: auto;
+    padding: 24px;
+    border: 2px solid #8f83ff;
+    border-radius: 24px;
+    color: white;
+    text-align: center;
+    background: linear-gradient(145deg, #11183f, #321e59);
+    box-shadow: 0 0 35px #8f83ff66;
+    animation: storyPop 0.4s ease;
+}
+
+.galaxy-map-panel h2 {
+    color: #ffe58a;
+}
+
+.galaxy-map-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 14px;
+    margin: 22px 0;
+}
+
+.galaxy-planet {
+    padding: 16px 8px;
+    border: 1px solid #8175d8;
+    border-radius: 18px;
+    background: #ffffff12;
+    color: white;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.galaxy-planet:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 0 18px #a99aff88;
+}
+
+.galaxy-planet.locked {
+    opacity: 0.48;
+    filter: grayscale(0.7);
+}
+
+.galaxy-planet.completed {
+    border-color: #ffe58a;
+    box-shadow: inset 0 0 15px #ffe58a22;
+}
+
+.galaxy-planet-icon {
+    display: block;
+    font-size: 36px;
+    margin-bottom: 8px;
+}
+
+.galaxy-planet small {
+    display: block;
+    margin-top: 7px;
+    color: #d9d5ff;
+}
+
+#galaxy-map-detail {
+    min-height: 42px;
+    padding: 12px;
+    border-radius: 12px;
+    background: #ffffff12;
+    color: #e7e3ff;
+}
+
+#close-galaxy-map {
+    padding: 11px 24px;
+    border: 0;
+    border-radius: 22px;
+    background: linear-gradient(90deg, #8d7cff, #ed82dc);
+    color: white;
+    cursor: pointer;
+}
+
+@media (max-width: 520px) {
+    .galaxy-map-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+/* ===== SPACE SOUND CONTROLS ===== */
+
+#space-sound-button {
+    position: fixed;
+    left: 22px;
+    bottom: 85px;
+    z-index: 102;
+    padding: 11px 16px;
+    border: 1px solid #a99aff;
+    border-radius: 25px;
+    background: #211d50;
+    color: white;
+    cursor: pointer;
+    box-shadow: 0 0 15px #a68bff66;
+}
+
+#space-sound-button:hover {
+    transform: scale(1.06);
+}
+
+/* ===== MISSION LAUNCH COUNTDOWN ===== */
+
+#launch-countdown {
+    position: fixed;
+    inset: 0;
+    z-index: 10005;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: radial-gradient(circle, #29205c, #050719 75%);
+    color: white;
+    text-align: center;
+}
+
+.launch-content h2 {
+    color: #ffe58a;
+    letter-spacing: 3px;
+}
+
+.launch-number {
+    font-size: clamp(90px, 20vw, 150px);
+    font-weight: 900;
+    color: #a99aff;
+    text-shadow: 0 0 35px #a99aff;
+    animation: launchPop 0.8s ease;
+}
+
+.launch-message {
+    color: #a8f5e0;
+    font-size: 20px;
+}
+
+@keyframes launchPop {
+    0% {
+        opacity: 0;
+        transform: scale(0.3) rotate(-20deg);
+    }
+
+    60% {
+        opacity: 1;
+        transform: scale(1.2) rotate(5deg);
+    }
+
+    100% {
+        transform: scale(1) rotate(0);
+    }
+}
+
+/* MISSION CONTROL DASHBOARD */
+#mission-control {
+    width: 100%;
+    box-sizing: border-box;
+    margin: 15px 0 22px;
+    padding: 18px;
+    border: 1px solid rgba(90, 190, 255, 0.45);
+    border-radius: 18px;
+    background: linear-gradient(135deg, #101d3c, #172b50);
+    color: white;
+    box-shadow: 0 0 20px rgba(40, 150, 255, 0.15);
+}
+
+#mission-control h3 {
+    color: #70d8ff;
+    margin: 0 0 15px;
+    letter-spacing: 2px;
+}
+
+.control-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+}
+
+.control-item {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    padding: 12px;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.control-item span {
+    color: #b8d5ff;
+    font-size: 13px;
+}
+
+.control-item strong {
+    color: #7dffcb;
+    font-size: 17px;
+}
+
+#mission-control>p {
+    color: #b8d5ff;
+    font-size: 12px;
+    margin: 17px 0 8px;
+    letter-spacing: 1px;
+}
+
+.control-progress {
+    height: 10px;
+    border-radius: 20px;
+    background: #263b5e;
+    overflow: hidden;
+}
+
+#control-progress-fill {
+    width: 0%;
+    height: 100%;
+    border-radius: 20px;
+    background: linear-gradient(90deg, #35d6ff, #75ffc2);
+    transition: width 0.3s ease;
+}
+
+@media (max-width: 500px) {
+    #mission-control {
+        padding: 13px;
+    }
+}
+
+/* SPACE MISSION ALERTS */
+#space-alert {
+    position: fixed;
+    top: 22px;
+    left: 50%;
+    transform: translateX(-50%) translateY(-20px);
+    z-index: 20000;
+    width: max-content;
+    max-width: 85%;
+    padding: 13px 22px;
+    border: 1px solid rgba(100, 210, 255, 0.7);
+    border-radius: 14px;
+    background: linear-gradient(135deg, #10244b, #203e70);
+    color: white;
+    font-weight: bold;
+    text-align: center;
+    box-shadow: 0 0 22px rgba(60, 170, 255, 0.4);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+#space-alert.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
+
+/* ALIEN SIGNAL CHALLENGE */
+#alien-signal-button {
+    position: fixed;
+    right: 20px;
+    bottom: 95px;
+    z-index: 15000;
+    padding: 13px 18px;
+    border: 1px solid #72eaff;
+    border-radius: 30px;
+    background: linear-gradient(135deg, #172b65, #672b91);
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 0 18px #4bcaff80;
+}
+
+#alien-signal-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 25000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 15px;
+    background: rgba(2, 5, 25, 0.88);
+}
+
+.alien-signal-card {
+    width: 100%;
+    max-width: 420px;
+    padding: 25px;
+    border: 1px solid #62dfff;
+    border-radius: 22px;
+    background: linear-gradient(145deg, #101b43, #30175b);
+    color: white;
+    text-align: center;
+    box-shadow: 0 0 35px #42caff55;
+}
+
+.alien-signal-card h2 {
+    color: #70eaff;
+}
+
+.alien-signal-options {
+    display: grid;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.alien-signal-options button,
+#alien-signal-close {
+    padding: 12px;
+    border: 1px solid #68cfff;
+    border-radius: 12px;
+    background: #20366a;
+    color: white;
+    cursor: pointer;
+    font-size: 15px;
+}
+
+.alien-signal-options button:hover,
+#alien-signal-close:hover {
+    background: #36599b;
+}
+
+#alien-signal-feedback {
+    min-height: 25px;
+    margin: 15px 0;
+    color: #8dffce;
+    font-weight: bold;
+}
+
+/* ===== SPACESHIP COCKPIT DESIGN ===== */
+
+#space-cockpit-button {
+    position: fixed;
+    right: 20px;
+    bottom: 155px;
+    z-index: 15000;
+    padding: 13px 18px;
+    border: 1px solid #72eaff;
+    border-radius: 30px;
+    background: linear-gradient(135deg, #092e58, #164d85);
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 0 18px #42caff80;
+}
+
+#space-cockpit-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 26000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 15px;
+    background: rgba(1, 5, 20, 0.92);
+}
+
+.space-cockpit-panel {
+    width: 100%;
+    max-width: 480px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-sizing: border-box;
+    padding: 24px;
+    border: 1px solid #4bdfff;
+    border-radius: 22px;
+    background: linear-gradient(145deg, #091a39, #182c58);
+    color: white;
+    text-align: center;
+    box-shadow: 0 0 35px #28baff55;
+}
+
+.space-cockpit-panel h2 {
+    color: #76eaff;
+}
+
+.cockpit-subtitle {
+    color: #a7c9ed;
+    font-size: 11px;
+    letter-spacing: 2px;
+}
+
+.cockpit-radar {
+    position: relative;
+    width: 190px;
+    height: 190px;
+    margin: 25px auto;
+    overflow: hidden;
+    border: 2px solid #54eaff;
+    border-radius: 50%;
+    background: radial-gradient(circle, #153d53, #071629);
+    box-shadow: 0 0 25px #3ceaff55;
+}
+
+.radar-ring {
+    position: absolute;
+    inset: 20%;
+    border: 1px solid #48dfff70;
+    border-radius: 50%;
+}
+
+.radar-ring:nth-child(2) {
+    inset: 40%;
+}
+
+.radar-ring:nth-child(3) {
+    inset: 0;
+}
+
+.radar-sweep {
+    position: absolute;
+    inset: 0;
+    background: conic-gradient(transparent 0deg,
+            #4affbd55 80deg,
+            transparent 100deg);
+    animation: radarRotate 4s linear infinite;
+}
+
+.radar-ship {
+    position: absolute;
+    top: 42%;
+    left: 43%;
+    font-size: 25px;
+}
+
+@keyframes radarRotate {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.cockpit-status {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+}
+
+.cockpit-status div {
+    padding: 12px 5px;
+    border-radius: 10px;
+    background: #ffffff12;
+}
+
+.cockpit-status span,
+.cockpit-status strong {
+    display: block;
+}
+
+.cockpit-status span {
+    color: #a8c9e9;
+    font-size: 11px;
+}
+
+.cockpit-status strong {
+    margin-top: 7px;
+    color: #75ffcb;
+    font-size: 12px;
+}
+
+.cockpit-controls {
+    display: grid;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.cockpit-controls button,
+#cockpit-close {
+    padding: 13px;
+    border: 1px solid #54dfff;
+    border-radius: 12px;
+    background: #183c70;
+    color: white;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+#cockpit-message {
+    min-height: 25px;
+    margin: 18px 0;
+    color: #79eaff;
+}
+
+#cockpit-close {
+    width: 100%;
+    background: #512b75;
+}
+
+@media (max-width: 450px) {
+    .space-cockpit-panel {
+        padding: 16px;
+    }
+}
+
+/* Astronaut ID button - top right corner */
+
+#astronaut-id-button {
+    position: fixed !important;
+    top: 65px !important;
+    right: 65px !important;
+    left: auto !important;
+    bottom: auto !important;
+    z-index: 9999;
+}
+
+/* ===== POST MISSION ADVENTURE: CRYSTAL RUSH ===== */
+#adventure-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 100000;
+    background: rgba(3, 5, 25, 0.96);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 15px;
+}
+
+.adventure-card {
+    width: min(500px, 100%);
+    padding: 28px;
+    border: 2px solid #55dfff;
+    border-radius: 22px;
+    background: linear-gradient(145deg, #101b45, #25104b);
+    color: white;
+    text-align: center;
+    box-shadow: 0 0 35px #297bff77;
+}
+
+.adventure-card h2 {
+    color: #70eaff;
+    font-size: 27px;
+}
+
+.adventure-card p {
+    line-height: 1.6;
+}
+
+#adventure-crystals {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin: 25px 0;
+}
+
+.adventure-crystal {
+    font-size: 38px;
+    padding: 12px;
+    border: 1px solid #6deaff66;
+    border-radius: 15px;
+    background: #172b59;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.adventure-crystal:hover {
+    transform: scale(1.15);
+    box-shadow: 0 0 20px #55dfff;
+}
+
+.adventure-crystal.collected {
+    opacity: 0.3;
+    cursor: default;
+    transform: scale(0.85);
+}
+
+#adventure-progress {
+    color: #ffe477;
+    font-weight: bold;
+    font-size: 19px;
+}
+
+#adventure-message {
+    min-height: 48px;
+    color: #83f5ff;
+    font-weight: bold;
+}
+
+#adventure-close {
+    padding: 12px 25px;
+    border: 0;
+    border-radius: 12px;
+    background: #40c9ff;
+    color: #07152e;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/* ===== OPENING STORY SCREEN ===== */
+
+#openingStory {
+    min-height: 100vh;
+    width: 100%;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    padding: 35px 18px;
+    background:
+        radial-gradient(circle at 50% 20%, #263d79, transparent 45%),
+        linear-gradient(135deg, #050817, #101b43, #080b20);
+    color: white;
+    text-align: center;
+    overflow-y: auto;
+}
+
+#openingStory.active {
+    display: flex;
+}
+
+.opening-story-content {
+    max-width: 750px;
+    width: 100%;
+    animation: openingAppear 1s ease;
+}
+
+.opening-label {
+    color: #69eaff;
+    letter-spacing: 5px;
+    font-size: 13px;
+    font-weight: bold;
+}
+
+.opening-astronaut {
+    width: 210px;
+    height: 210px;
+    margin: 20px auto;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 3px solid #6deaff;
+    box-shadow: 0 0 35px #32cfff88;
+}
+
+.opening-astronaut img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+#openingStory h1 {
+    color: #83eaff;
+    font-size: clamp(25px, 5vw, 42px);
+    text-shadow: 0 0 18px #35cfff;
+}
+
+.opening-year {
+    color: #ffd875;
+    letter-spacing: 3px;
+    font-size: 12px;
+}
+
+.opening-story-text {
+    max-width: 600px;
+    margin: 25px auto;
+    line-height: 1.8;
+    color: #dce8ff;
+}
+
+.opening-story-text h3 {
+    color: #ffe17b;
+    margin-top: 20px;
+}
+
+#openingNextButton {
+    padding: 14px 45px;
+    border: 0;
+    border-radius: 30px;
+    background: linear-gradient(90deg, #35cfff, #8272ff);
+    color: white;
+    font-size: 17px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 0 22px #35cfff88;
+    transition: 0.3s;
+}
+
+#openingNextButton:hover {
+    transform: scale(1.08);
+    box-shadow: 0 0 35px #35cfff;
+}
+
+@keyframes openingAppear {
+    from {
+        opacity: 0;
+        transform: translateY(25px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* =================================
+   ROCKET RACING - GALAXY SPEED RUN
+================================= */
+
+#racingPage {
+    padding: 35px 18px;
+}
+
+#racing-game {
+    max-width: 850px;
+    margin: 25px auto;
+    text-align: center;
+}
+
+#racing-hud {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    gap: 12px;
+    padding: 15px;
+    margin-bottom: 12px;
+    border: 1px solid #52dfff;
+    border-radius: 14px;
+    background: #101c42;
+    color: white;
+    font-weight: bold;
+}
+
+#race-arena {
+    position: relative;
+    width: 100%;
+    height: 480px;
+    overflow: hidden;
+    border: 2px solid #4de5ff;
+    border-radius: 18px;
+    background:
+        radial-gradient(circle at 20% 25%, #344d91 1px, transparent 3px),
+        radial-gradient(circle at 75% 60%, #5266ad 1px, transparent 3px),
+        radial-gradient(circle at 45% 80%, #5266ad 1px, transparent 3px),
+        radial-gradient(circle at 85% 15%, #5266ad 1px, transparent 3px),
+        linear-gradient(180deg, #070b27, #17104a, #080d29);
+    background-size: 100px 100px, 130px 130px, 170px 170px, 120px 120px, auto;
+    box-shadow: 0 0 30px #36cfff55;
+}
+
+/* Player rocket */
+
+#race-player {
+    position: absolute;
+    bottom: 25px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 48px;
+    z-index: 5;
+    filter: drop-shadow(0 0 12px #42dfff);
+    transition: left 0.08s linear;
+}
+
+/* Asteroids */
+
+.race-asteroid {
+    position: absolute;
+    top: -50px;
+    font-size: 34px;
+    z-index: 3;
+}
+
+/* Energy crystals */
+
+.race-crystal {
+    position: absolute;
+    top: -40px;
+    font-size: 27px;
+    z-index: 3;
+    filter: drop-shadow(0 0 10px cyan);
+}
+
+/* Game start and finish message */
+
+#race-message {
+    position: absolute;
+    inset: 0;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: rgba(4, 8, 30, 0.88);
+    color: white;
+    font-size: 27px;
+    font-weight: bold;
+    padding: 20px;
+}
+
+#race-message p {
+    font-size: 15px;
+    color: #b9dfff;
+}
+
+#race-start {
+    padding: 14px 30px;
+    border: none;
+    border-radius: 25px;
+    background: linear-gradient(90deg, #20d9ff, #8a65ff);
+    color: white;
+    font-weight: bold;
+    font-size: 16px;
+    cursor: pointer;
+    box-shadow: 0 0 20px #20d9ff88;
+}
+
+#race-start:hover {
+    transform: scale(1.08);
+}
+
+/* Mobile controls */
+
+.race-controls {
+    display: flex;
+    justify-content: center;
+    gap: 25px;
+    margin: 18px 0;
+}
+
+.race-controls button {
+    padding: 14px 25px;
+    border: 1px solid #55e5ff;
+    border-radius: 14px;
+    background: #14234d;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.race-controls button:active {
+    background: #2469a8;
+    transform: scale(0.95);
+}
+
+#race-instructions {
+    color: #b9dfff;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+@media (max-width: 550px) {
+    #race-arena {
+        height: 420px;
+    }
+
+    #racing-hud {
+        font-size: 12px;
+    }
+
+    .race-controls button {
+        padding: 13px 18px;
+    }
+}
+
+/* ===== ANIMATED GALAXY RACING BACKGROUND ===== */
+
+#race-arena {
+    isolation: isolate;
+    background:
+        radial-gradient(ellipse at center, #17245a 0%, #090d2b 75%, #030615 100%);
+}
+
+/* Moving stars */
+#race-arena::before {
+    content: "";
+    position: absolute;
+    inset: -100% 0;
+    z-index: 0;
+    pointer-events: none;
+
+    background-image:
+        radial-gradient(2px 2px at 20px 30px, white 99%, transparent),
+        radial-gradient(2px 2px at 100px 150px, #76eaff 99%, transparent),
+        radial-gradient(3px 3px at 200px 80px, white 99%, transparent),
+        radial-gradient(1px 1px at 300px 220px, white 99%, transparent),
+        radial-gradient(2px 2px at 400px 120px, #b8a5ff 99%, transparent);
+
+    background-size: 450px 300px;
+    background-repeat: repeat;
+    opacity: 0.8;
+    animation: galaxyStarMove 9s linear infinite;
+}
+
+/* Glowing distant planet */
+#race-arena::after {
+    content: "";
+    position: absolute;
+    top: 45px;
+    right: 45px;
+    width: 95px;
+    height: 95px;
+    z-index: 0;
+    pointer-events: none;
+    border-radius: 50%;
+
+    background:
+        radial-gradient(circle at 30% 30%, #b7f5ff, #3985d9 45%, #17185e 75%);
+
+    box-shadow:
+        0 0 25px #49aaff88,
+        0 0 60px #395cff55;
+
+    animation: distantPlanetFloat 5s ease-in-out infinite;
+}
+
+/* Background animations */
+@keyframes galaxyStarMove {
+    from {
+        transform: translateY(0);
+    }
+
+    to {
+        transform: translateY(300px);
+    }
+}
+
+@keyframes distantPlanetFloat {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(15px);
+    }
+}
+
+/* ===== ROCKET ENGINE EFFECTS ===== */
+
+#race-player {
+    isolation: isolate;
+    animation: rocketHover 1.2s ease-in-out infinite;
+    filter: drop-shadow(0 0 12px #42dfff);
+}
+
+/* Engine flame */
+#race-player::after {
+    content: "🔥";
+    position: absolute;
+    left: 50%;
+    top: 70%;
+    transform: translateX(-50%);
+    font-size: 23px;
+    z-index: -1;
+    animation: engineFlame 0.25s ease-in-out infinite alternate;
+}
+
+/* Rocket floating */
+@keyframes rocketHover {
+
+    0%,
+    100% {
+        margin-top: 0;
+    }
+
+    50% {
+        margin-top: -7px;
+    }
+}
+
+/* Engine flame movement */
+@keyframes engineFlame {
+    from {
+        transform: translateX(-50%) scaleY(0.8);
+        opacity: 0.7;
+    }
+
+    to {
+        transform: translateX(-50%) scaleY(1.3);
+        opacity: 1;
+    }
+}
+
+/* Speed trail */
+#race-player::before {
+    content: "";
+    position: absolute;
+    width: 5px;
+    height: 55px;
+    left: 50%;
+    top: 75%;
+    transform: translateX(-50%);
+    background: linear-gradient(#39eaff, transparent);
+    filter: blur(4px);
+    z-index: -2;
+    animation: speedTrail 0.3s linear infinite;
+}
+
+@keyframes speedTrail {
+    from {
+        opacity: 0.9;
+        height: 35px;
+    }
+
+    to {
+        opacity: 0.2;
+        height: 65px;
+    }
+}
+
+/* Damage effect */
+#race-arena.race-damaged {
+    animation: damageFlash 0.2s ease;
+}
+
+@keyframes damageFlash {
+
+    0%,
+    100% {
+        filter: brightness(1);
+    }
+
+    50% {
+        filter: brightness(2);
+    }
+}
+
+/* ===== ROCKET GARAGE DESIGN ===== */
+
+#rocket-garage {
+    margin: 18px auto;
+    padding: 18px;
+    max-width: 850px;
+    text-align: center;
+    color: white;
+    background: linear-gradient(135deg, #101b43, #25134d);
+    border: 1px solid #48dcff;
+    border-radius: 18px;
+    box-shadow: 0 0 20px #35cfff33;
+}
+
+#rocket-garage h3 {
+    color: #66eaff;
+    margin: 0 0 8px;
+}
+
+#rocket-garage p {
+    color: #c5d9ff;
+    font-size: 13px;
+}
+
+.rocket-options {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 15px;
+}
+
+.rocket-choice {
+    min-width: 105px;
+    padding: 13px;
+    border: 1px solid #536baf;
+    border-radius: 14px;
+    background: #101a3d;
+    color: white;
+    font-size: 28px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.rocket-choice span {
+    display: block;
+    margin-top: 6px;
+    font-size: 12px;
+}
+
+.rocket-choice:hover {
+    transform: translateY(-4px);
+    border-color: #5ceaff;
+}
+
+.rocket-choice.selected {
+    border: 2px solid #5ceaff;
+    background: #173b68;
+    box-shadow: 0 0 18px #43dfff77;
+}
+
+/* ===== FIX ALIEN EXPLORER VISIBILITY ===== */
+
+#alien-explorer-overlay {
+    position: fixed !important;
+    inset: 0 !important;
+    z-index: 999999 !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    padding: 20px !important;
+    background: rgba(2, 5, 25, 0.95) !important;
+    overflow-y: auto !important;
+}
+
+.alien-explorer-card {
+    position: relative;
+    z-index: 1000000;
+    width: 100%;
+    max-width: 650px;
+    padding: 25px;
+    border: 2px solid #55eaff;
+    border-radius: 22px;
+    background: linear-gradient(145deg, #101b46, #35145b);
+    color: white;
+    text-align: center;
+    box-shadow: 0 0 35px #42dfff88;
+}
+
+.alien-planet-area {
+    position: relative;
+    min-height: 240px;
+    margin: 20px 0;
+    border: 1px solid #5deaff;
+    border-radius: 18px;
+    background: radial-gradient(circle, #315a85, #10102f 75%);
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.alien-find {
+    padding: 15px;
+    border: 1px solid #65eaff;
+    border-radius: 50%;
+    background: #182b57;
+    font-size: 30px;
+    cursor: pointer;
+}
+
+.alien-find.found {
+    opacity: 0.5;
+    cursor: default;
+}
+
+.friendly-alien {
+    font-size: 65px;
+    animation: alienFloat 2s ease-in-out infinite;
+}
+
+@keyframes alienFloat {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-12px);
+    }
+}
+
+#alien-explorer-close {
+    margin-top: 15px;
+    padding: 13px 25px;
+    border: none;
+    border-radius: 25px;
+    background: linear-gradient(90deg, #16cfff, #8155ff);
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/* ===== LIVING ALIEN PLANET ===== */
+
+.alien-planet-area {
+    overflow: hidden;
+    isolation: isolate;
+}
+
+/* Walking astronaut */
+.explorer-astronaut {
+    position: absolute;
+    bottom: 8px;
+    left: 5%;
+    z-index: 4;
+    font-size: 38px;
+    pointer-events: none;
+    animation: astronautWalk 8s linear infinite;
+}
+
+@keyframes astronautWalk {
+    0% {
+        left: 5%;
+        transform: translateY(0) scaleX(1);
+    }
+
+    45% {
+        left: 75%;
+        transform: translateY(-5px) scaleX(1);
+    }
+
+    50% {
+        left: 75%;
+        transform: translateY(0) scaleX(-1);
+    }
+
+    95% {
+        left: 5%;
+        transform: translateY(-5px) scaleX(-1);
+    }
+
+    100% {
+        left: 5%;
+        transform: translateY(0) scaleX(1);
+    }
+}
+
+/* Moving alien */
+.roaming-alien {
+    position: absolute;
+    top: 15px;
+    left: 15%;
+    z-index: 3;
+    font-size: 38px;
+    pointer-events: none;
+    animation: alienRoaming 5s ease-in-out infinite alternate;
+}
+
+@keyframes alienRoaming {
+    0% {
+        left: 15%;
+        transform: translateY(0) rotate(-10deg);
+    }
+
+    50% {
+        transform: translateY(-18px) rotate(10deg);
+    }
+
+    100% {
+        left: 75%;
+        transform: translateY(0) rotate(-10deg);
+    }
+}
+
+/* ===== CINEMATIC MISSION LAUNCH ===== */
+
+.launch-scene {
+    position: relative;
+    width: 100%;
+    height: 240px;
+    overflow: hidden;
+    border-radius: 20px;
+    background: radial-gradient(circle at 50% 100%, #263c78, #080d2b 75%);
+    margin-bottom: 20px;
+}
+
+.launch-stars {
+    position: absolute;
+    top: 20px;
+    width: 100%;
+    text-align: center;
+    font-size: 24px;
+    animation: starsGlow 2s infinite alternate;
+}
+
+.launch-planet {
+    position: absolute;
+    bottom: -55px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 140px;
+}
+
+.launch-rocket {
+    position: absolute;
+    left: 50%;
+    bottom: 15px;
+    transform: translateX(-50%);
+    font-size: 65px;
+    z-index: 3;
+    animation: rocketLiftoff 4s ease-in forwards;
+    animation-play-state: paused;
+}
+
+.launch-countdown-go .launch-rocket {
+    animation-play-state: running;
+}
+
+.launch-smoke {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 28px;
+    animation: smokeFloat 1s infinite alternate;
+}
+
+@keyframes rocketLiftoff {
+    0% {
+        bottom: 15px;
+    }
+
+    100% {
+        bottom: 320px;
+    }
+}
+
+@keyframes smokeFloat {
+    from {
+        opacity: 0.4;
+        transform: translate(-50%, 0);
+    }
+
+    to {
+        opacity: 1;
+        transform: translate(-50%, -12px);
+    }
+}
+
+@keyframes starsGlow {
+    from {
+        opacity: 0.4;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+/* ===== DESTINATION TRAVEL ANIMATION ===== */
+
+#mission-travel-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 9999999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #030617;
+    color: white;
+    overflow: hidden;
+}
+
+.travel-scene {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    min-height: 450px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    background:
+        radial-gradient(circle at 50% 50%, #202b68, #080d29 65%, #02030e);
+    overflow: hidden;
+}
+
+.travel-heading {
+    position: absolute;
+    top: 9%;
+    z-index: 5;
+    font-size: clamp(18px, 4vw, 30px);
+    font-weight: bold;
+    text-align: center;
+    color: #72eaff;
+    text-shadow: 0 0 15px #35cfff;
+}
+
+.travel-stars {
+    position: absolute;
+    top: 22%;
+    width: 100%;
+    text-align: center;
+    font-size: 28px;
+    letter-spacing: 15px;
+    animation: travelStars 2s infinite alternate;
+}
+
+.travel-rocket {
+    position: absolute;
+    z-index: 4;
+    font-size: 65px;
+    animation: travelRocket 3s ease-in-out forwards;
+}
+
+.travel-planet {
+    position: absolute;
+    right: -20%;
+    bottom: 12%;
+    font-size: clamp(130px, 30vw, 230px);
+    opacity: 0;
+    animation: planetApproach 4s ease-out forwards;
+}
+
+.travel-astronaut {
+    position: absolute;
+    left: 18%;
+    bottom: 18%;
+    font-size: 55px;
+    opacity: 0;
+    animation: astronautArrival 4s 1.5s ease-out forwards;
+}
+
+.travel-message {
+    position: absolute;
+    bottom: 10%;
+    font-size: 17px;
+    text-align: center;
+    color: #d9faff;
+}
+
+.travel-status {
+    position: absolute;
+    bottom: 5%;
+    font-size: 11px;
+    letter-spacing: 3px;
+    color: #65eaff;
+}
+
+@keyframes travelRocket {
+    0% {
+        transform: translate(0, 100px) rotate(-35deg);
+    }
+
+    100% {
+        transform: translate(250px, -180px) rotate(-35deg);
+    }
+}
+
+@keyframes planetApproach {
+    0% {
+        opacity: 0;
+        transform: scale(0.2);
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes astronautArrival {
+    0% {
+        opacity: 0;
+        transform: translateY(50px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes travelStars {
+    from {
+        opacity: 0.3;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+.travel-arrived .travel-planet {
+    animation: planetGlow 1s infinite alternate;
+}
+
+@keyframes planetGlow {
+    from {
+        filter: drop-shadow(0 0 5px #56cfff);
+    }
+
+    to {
+        filter: drop-shadow(0 0 35px #56cfff);
+    }
+}
+
+/* ===== UNIQUE MISSION ENVIRONMENTS ===== */
+
+/* Moon */
+#mission-travel-overlay.mission-scene-0 .travel-scene {
+    background: radial-gradient(circle at 70% 65%,
+            #62677e, #171d35 45%, #02030e);
+}
+
+#mission-travel-overlay.mission-scene-0 .travel-planet {
+    filter: drop-shadow(0 0 35px #cbd5e1);
+}
+
+/* Mars */
+#mission-travel-overlay.mission-scene-1 .travel-scene {
+    background: radial-gradient(circle at 70% 65%,
+            #a34426, #431b25 48%, #08030c);
+}
+
+#mission-travel-overlay.mission-scene-1 .travel-planet {
+    filter: drop-shadow(0 0 35px #ff5722);
+}
+
+/* International Space Station */
+#mission-travel-overlay.mission-scene-2 .travel-scene {
+    background: radial-gradient(circle at 50% 50%,
+            #234b76, #10162f 55%, #02030e);
+}
+
+/* Solar System */
+#mission-travel-overlay.mission-scene-3 .travel-scene {
+    background: radial-gradient(circle at 50% 50%,
+            #554080, #171333 55%, #02030e);
+}
+
+/* Space Survival */
+#mission-travel-overlay.mission-scene-4 .travel-scene {
+    background: radial-gradient(circle at 50% 50%,
+            #153c57, #080d29 55%, #000);
+}
+
+/* Galaxy Survival */
+#mission-travel-overlay.mission-scene-5 .travel-scene {
+    background: radial-gradient(circle at 50% 50%,
+            #713b9a, #241342 50%, #02030e);
+}
+
+/* Unknown Mission */
+#mission-travel-overlay.mission-scene-6 .travel-scene {
+    background: radial-gradient(circle at 50% 50%,
+            #176d70, #10203e 50%, #02030e);
+}
+
+/* ===== MISSION LANDING EFFECTS ===== */
+
+.travel-scene::before,
+.travel-scene::after {
+    content: "";
+    position: absolute;
+    pointer-events: none;
+}
+
+/* MOON: floating lunar dust */
+#mission-travel-overlay.mission-scene-0 .travel-scene::before {
+    content: "☁️  ☁️  ☁️";
+    bottom: 12%;
+    left: 15%;
+    font-size: 35px;
+    opacity: 0;
+    animation: moonDust 3s 1s ease-out infinite;
+}
+
+@keyframes moonDust {
+    0% {
+        opacity: 0;
+        transform: translateY(25px) scale(0.6);
+    }
+
+    50% {
+        opacity: 0.8;
+        transform: translateY(-15px) scale(1.2);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translateY(-45px) scale(1.5);
+    }
+}
+
+/* MARS: red dust storm */
+#mission-travel-overlay.mission-scene-1 .travel-scene::before {
+    content: "〰️  〰️  〰️";
+    bottom: 20%;
+    left: -30%;
+    width: 160%;
+    text-align: center;
+    font-size: 40px;
+    opacity: 0;
+    animation: marsStorm 3s ease-in-out infinite;
+}
+
+@keyframes marsStorm {
+    0% {
+        opacity: 0;
+        transform: translateX(-15%);
+    }
+
+    50% {
+        opacity: 0.9;
+    }
+
+    100% {
+        opacity: 0;
+        transform: translateX(15%);
+    }
+}
+
+/* ISS: space station docking */
+#mission-travel-overlay.mission-scene-2 .travel-scene::before {
+    content: "🛰️";
+    position: absolute;
+    top: 35%;
+    right: 12%;
+    font-size: 75px;
+    animation: stationFloat 3s ease-in-out infinite alternate;
+}
+
+#mission-travel-overlay.mission-scene-2 .travel-rocket {
+    animation: dockingApproach 3s ease-in-out forwards;
+}
+
+@keyframes stationFloat {
+    from {
+        transform: translateY(-8px);
+    }
+
+    to {
+        transform: translateY(8px);
+    }
+}
+
+@keyframes dockingApproach {
+    0% {
+        transform: translate(-180px, 100px) rotate(-15deg);
+    }
+
+    100% {
+        transform: translate(50px, 0) rotate(0deg);
+    }
+}
+
+/* ===== ASTRONAUT PLANET EXPLORATION ===== */
+
+#mission-travel-overlay.travel-arrived .travel-astronaut {
+    animation: astronautExplore 2.5s ease-in-out forwards;
+}
+
+@keyframes astronautExplore {
+    0% {
+        opacity: 1;
+        transform: translateX(0) translateY(0);
+    }
+
+    40% {
+        transform: translateX(35px) translateY(-8px);
+    }
+
+    70% {
+        transform: translateX(65px) translateY(0);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateX(90px) translateY(-5px);
+    }
+}
+
+/* Arrival announcement */
+.mission-arrival-banner {
+    position: absolute;
+    top: 72%;
+    left: 50%;
+    z-index: 10;
+    width: 90%;
+    text-align: center;
+    font-size: 21px;
+    font-weight: bold;
+    color: #7effdc;
+    text-shadow: 0 0 15px #26eaff;
+    opacity: 0;
+    transform: translate(-50%, 20px);
+    animation: arrivalAnnouncement 1s 3s ease forwards;
+}
+
+.mission-arrival-banner span {
+    display: block;
+    margin-top: 8px;
+    font-size: 13px;
+    color: white;
+    font-weight: normal;
+}
+
+@keyframes arrivalAnnouncement {
+    to {
+        opacity: 1;
+        transform: translate(-50%, 0);
+    }
+}

@@ -23,6 +23,39 @@
     </header>
 
     <main>
+
+        <!-- ===== OPENING STORY PAGE ===== -->
+        <section id="openingStory" class="page">
+            <div class="opening-story-content">
+
+                <p class="opening-label">✦ A GALAXY AWAITS YOU ✦</p>
+
+                <div class="opening-astronaut">
+                    <div style="font-size:110px;">🧑‍🚀</div>
+                </div>
+
+                <h1>THE CALL OF THE GALAXY</h1>
+
+                <p class="opening-year">YEAR 2150 • EARTH SPACE STATION</p>
+
+                <div class="opening-story-text">
+                    <p>🌍 Earth has received a mysterious signal from an unknown galaxy.</p>
+
+                    <p>🛰️ You have been selected as a Junior Astronaut to investigate it.</p>
+
+                    <p>🌌 Explore mysterious planets, solve challenges and discover the secrets of the universe.</p>
+
+                    <h3>Your journey begins now, Astronaut!</h3>
+                </div>
+
+                <button id="openingNextButton">
+                    NEXT ➜
+                </button>
+
+            </div>
+        </section>
+        <!-- ===== END OPENING STORY PAGE ===== -->
+
         <!-- PAGE 1: WELCOME -->
         <section id="homePage" class="page active">
             <div class="hero">
@@ -58,6 +91,11 @@
         <!-- PAGE 2: MISSIONS -->
         <section id="missionsPage" class="page">
 
+            <button class="secondary-btn" onclick="openAlienExplorer()">
+                👽 EXPLORE ALIEN PLANET
+            </button>
+
+
             <div class="section-heading">
                 <div class="eyebrow">YOUR SPACE ADVENTURE</div>
                 <h2>MISSION <span>CONTROL</span></h2>
@@ -80,10 +118,123 @@
             <button class="secondary-btn" onclick="showPage('reportPage')">
                 VIEW PROGRESS REPORT →
             </button>
-
+            <button class="secondary-btn" onclick="showPage('racingPage')">
+                🏁 PLAY ROCKET RACING
+            </button>
         </section>
+
+        <!-- ===== ROCKET RACING ENTRY BUTTON ===== -->
+
+
+        <!-- ===== ROCKET RACING GAME ===== -->
+        <section id="racingPage" class="page">
+
+            <div class="section-heading">
+                <div class="eyebrow">GALAXY SPEED CHALLENGE</div>
+                <h2>ROCKET <span>RACING</span></h2>
+                <p>Dodge asteroids, collect energy crystals and reach the finish line!</p>
+            </div>
+
+            <div id="racing-game">
+
+                <div id="racing-hud">
+                    <div>❤️ Lives: <span id="race-lives">3</span></div>
+                    <div>💎 Score: <span id="race-score">0</span></div>
+                    <div>⏱️ Time: <span id="race-time">0</span>s</div>
+                </div>
+
+                <!-- ===== ROCKET GARAGE ===== -->
+                <div id="rocket-garage">
+                    <h3>🚀 CHOOSE YOUR ROCKET</h3>
+                    <p>Select your spacecraft before the race!</p>
+
+                    <div class="rocket-options">
+
+                        <button class="rocket-choice selected" data-rocket="🚀" data-speed="5">
+                            🚀 <span>Explorer</span>
+                            <small>Balanced speed</small>
+                        </button>
+
+                        <button class="rocket-choice" data-rocket="🛸" data-speed="7">
+                            🛸 <span>UFO</span>
+                            <small>Fast speed</small>
+                        </button>
+
+                        <button class="rocket-choice" data-rocket="🛰️" data-speed="4">
+                            🛰️ <span>Satellite</span>
+                            <small>Steady control</small>
+                        </button>
+
+                        <button class="rocket-choice" data-rocket="🌌" data-speed="9">
+                            🌌 <span>Galaxy</span>
+                            <small>Turbo speed</small>
+                        </button>
+
+                    </div>
+                </div>
+                <!-- ===== END ROCKET GARAGE ===== -->
+
+                <div id="race-arena">
+                    <div id="race-player">🚀</div>
+                    <div id="race-message">
+                        READY, ASTRONAUT?
+                        <p>Start your engine!</p>
+                        <button id="race-start">START RACE 🚀</button>
+                    </div>
+                </div>
+
+                <div class="race-controls">
+                    <button id="race-left">⬅️ LEFT</button>
+                    <button id="race-right">RIGHT ➡️</button>
+                </div>
+
+                <p id="race-instructions">
+                    Use ← and → arrow keys or the buttons to dodge asteroids!
+                    Collect 💎 crystals for bonus points.
+                </p>
+
+                <button class="secondary-btn" onclick="showPage('missionsPage')">
+                    ← BACK TO MISSIONS
+                </button>
+
+            </div>
+        </section>
+        <!-- ===== END ROCKET RACING ===== -->
+
         <!-- PAGE 3: QUIZ -->
         <section id="quizPage" class="page">
+
+            <div id="mission-control">
+                <h3>🛰️ MISSION CONTROL</h3>
+
+                <div class="control-grid">
+                    <div class="control-item">
+                        <span>🚀 Spaceship</span>
+                        <strong>READY</strong>
+                    </div>
+
+                    <div class="control-item">
+                        <span>🫧 Oxygen</span>
+                        <strong>100%</strong>
+                    </div>
+
+                    <div class="control-item">
+                        <span>⛽ Fuel</span>
+                        <strong>100%</strong>
+                    </div>
+
+                    <div class="control-item">
+                        <span>🌍 Mission</span>
+                        <strong id="control-mission">01</strong>
+                    </div>
+                </div>
+
+                <p>MISSION PROGRESS</p>
+                <div class="control-progress">
+                    <div id="control-progress-fill"></div>
+                </div>
+            </div>
+
             <div class="quiz-top">
                 <button class="back-btn" onclick="showPage('missionsPage')">← Missions</button>
                 <span id="quizMissionName">Mission</span>
