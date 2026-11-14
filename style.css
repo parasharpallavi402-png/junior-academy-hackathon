@@ -3848,3 +3848,358 @@ body.mission-bg-9::after {
     border-color: #39e6a0;
     box-shadow: 0 0 18px rgba(57, 230, 160, 0.5);
 }
+
+/* =====================================
+   NASA DONKI SPACE WEATHER PANEL
+===================================== */
+
+.donki-panel {
+    width: min(100% - 30px, 1050px);
+    margin: 35px auto;
+    padding: 25px;
+    background: linear-gradient(145deg, #101a36, #080e20);
+    border: 1px solid rgba(57, 197, 255, 0.45);
+    border-radius: 20px;
+    color: #f4f7ff;
+    box-shadow: 0 0 25px rgba(57, 197, 255, 0.12);
+}
+
+.donki-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+}
+
+.donki-eyebrow {
+    color: #39c5ff;
+    font-size: 11px;
+    letter-spacing: 3px;
+    font-weight: bold;
+}
+
+.donki-header h2 {
+    color: #ffffff;
+    margin: 8px 0;
+}
+
+.donki-subtitle {
+    color: #a8b5d3;
+    font-size: 13px;
+}
+
+.donki-panel button {
+    padding: 11px 17px;
+    border: 1px solid #39c5ff;
+    border-radius: 10px;
+    background: #14294a;
+    color: #39c5ff;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.donki-panel button:hover {
+    background: #21436d;
+    box-shadow: 0 0 15px rgba(57, 197, 255, 0.3);
+}
+
+.donki-panel button:disabled {
+    opacity: 0.5;
+    cursor: wait;
+}
+
+.donki-status {
+    color: #39c5ff;
+    margin: 15px 0;
+    font-size: 13px;
+}
+
+.donki-alert {
+    padding: 16px;
+    margin: 15px 0;
+    border-radius: 12px;
+    background: rgba(57, 197, 255, 0.09);
+    border: 1px solid rgba(57, 197, 255, 0.35);
+    line-height: 1.6;
+}
+
+.donki-alert.caution {
+    border-color: #ffbd59;
+    background: rgba(255, 189, 89, 0.1);
+}
+
+.donki-alert.elevated {
+    border-color: #ff6d83;
+    background: rgba(255, 109, 131, 0.1);
+}
+
+.donki-events-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+    margin-top: 20px;
+}
+
+.donki-event-box {
+    min-width: 0;
+    padding: 18px;
+    border-radius: 14px;
+    background: #111d38;
+    border: 1px solid #293b60;
+}
+
+.donki-event-box h3 {
+    color: #39c5ff;
+    margin-top: 0;
+}
+
+.donki-event-card {
+    padding: 12px;
+    margin: 10px 0;
+    background: #192846;
+    border-radius: 10px;
+    border-left: 3px solid #39c5ff;
+}
+
+.donki-event-card strong {
+    color: #ffffff;
+    display: block;
+    margin-bottom: 6px;
+}
+
+.donki-event-card p {
+    color: #b9c6df;
+    font-size: 13px;
+    line-height: 1.5;
+    margin: 4px 0;
+    overflow-wrap: anywhere;
+}
+
+.donki-empty {
+    color: #a8b5d3;
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+.donki-shield-box {
+    margin-top: 20px;
+    padding: 20px;
+    border: 1px solid rgba(168, 117, 255, 0.4);
+    border-radius: 14px;
+    background: rgba(168, 117, 255, 0.08);
+}
+
+.donki-shield-box h3 {
+    color: #c5a4ff;
+}
+
+.donki-shield-box p {
+    color: #c4cde0;
+    line-height: 1.6;
+}
+
+#donkiShieldCheck {
+    color: #ffffff;
+    background: #593a9b;
+    border-color: #a875ff;
+}
+
+.donki-footer {
+    margin-top: 20px;
+    color: #8393b4;
+    font-size: 11px;
+    line-height: 1.6;
+}
+
+@media (max-width: 650px) {
+    .donki-events-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .donki-panel {
+        padding: 16px;
+    }
+}
+
+/* ===================================
+   ASTROQUEST NASA DONKI DESIGN
+=================================== */
+
+.donki-open-button {
+    position: fixed;
+    bottom: 25px;
+    left: 25px;
+    z-index: 9999;
+    padding: 13px 20px;
+    border: 1px solid #39c5ff;
+    border-radius: 30px;
+    background: #111a35;
+    color: #39c5ff;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 0 15px rgba(57, 197, 255, 0.3);
+}
+
+.donki-dashboard {
+    display: none;
+    position: fixed;
+    inset: 3%;
+    z-index: 10000;
+    overflow-y: auto;
+    padding: 28px;
+    border: 1px solid #39c5ff;
+    border-radius: 20px;
+    background: #070b1d;
+    color: #f4f7ff;
+    box-shadow: 0 0 35px rgba(57, 197, 255, 0.25);
+}
+
+.donki-dashboard.donki-visible {
+    display: block;
+}
+
+.donki-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 15px;
+}
+
+.donki-kicker {
+    color: #39c5ff;
+    letter-spacing: 3px;
+    font-size: 12px;
+}
+
+.donki-header h1 {
+    color: #39c5ff;
+    margin: 8px 0;
+}
+
+.donki-header p {
+    color: #a8b5d3;
+}
+
+.donki-close {
+    background: #ff526d;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 10px 15px;
+    cursor: pointer;
+}
+
+.donki-status-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin: 25px 0;
+    padding: 15px;
+    background: #111a35;
+    border-radius: 12px;
+}
+
+#donkiStatus {
+    color: #39e6a0;
+    font-weight: bold;
+}
+
+#donkiRefreshButton {
+    background: #173a60;
+    color: #39c5ff;
+    border: 1px solid #39c5ff;
+    border-radius: 20px;
+    padding: 10px 17px;
+    cursor: pointer;
+}
+
+.donki-stats {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 15px;
+}
+
+.donki-stat {
+    text-align: center;
+    padding: 20px 10px;
+    background: #111a35;
+    border: 1px solid #24375e;
+    border-radius: 15px;
+}
+
+.donki-stat span {
+    font-size: 28px;
+}
+
+.donki-stat h2 {
+    color: #39c5ff;
+    font-size: 27px;
+}
+
+.donki-stat p {
+    color: #a8b5d3;
+    font-size: 13px;
+}
+
+.donki-section-title {
+    color: #39c5ff;
+    margin: 30px 0 15px;
+}
+
+.donki-events {
+    display: grid;
+    gap: 12px;
+}
+
+.donki-event-card {
+    padding: 17px;
+    background: #111a35;
+    border: 1px solid #293c64;
+    border-left: 4px solid #39c5ff;
+    border-radius: 12px;
+}
+
+.donki-event-card h3 {
+    color: #8bdcff;
+    margin-bottom: 8px;
+}
+
+.donki-event-card p {
+    color: #c0cce4;
+    font-size: 14px;
+    line-height: 1.6;
+    overflow-wrap: anywhere;
+}
+
+.donki-event-card a {
+    display: inline-block;
+    margin-top: 10px;
+    color: #39e6a0;
+}
+
+.donki-footer {
+    color: #8999b8;
+    font-size: 12px;
+    margin-top: 25px;
+    line-height: 1.6;
+}
+
+@media (max-width: 650px) {
+    .donki-dashboard {
+        inset: 2%;
+        padding: 16px;
+    }
+
+    .donki-stats {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .donki-header h1 {
+        font-size: 21px;
+    }
+}

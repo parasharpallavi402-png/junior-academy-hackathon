@@ -465,6 +465,140 @@
 
     </div>
     <script src="script.js"></script>
+    <!-- NASA DONKI SPACE WEATHER PANEL -->
+    <section id="nasaDonkiPanel" class="donki-panel">
+
+        <div class="donki-header">
+            <div>
+                <p class="donki-eyebrow">NASA SPACE WEATHER DATA</p>
+                <h2>☀️ DONKI MISSION CONTROL</h2>
+                <p class="donki-subtitle">Real solar activity • Last 30 days</p>
+            </div>
+
+            <button id="donkiRefreshBtn" type="button">
+                ↻ Refresh Data
+            </button>
+        </div>
+
+        <div id="donkiLoading" class="donki-status">
+            Connecting to NASA...
+        </div>
+
+        <div id="donkiAlert" class="donki-alert">
+            Waiting for space-weather data...
+        </div>
+
+        <div class="donki-events-grid">
+
+            <div class="donki-event-box">
+                <h3>☀️ Solar Flares</h3>
+                <div id="donkiFlareList">
+                    Loading solar flare events...
+                </div>
+            </div>
+
+            <div class="donki-event-box">
+                <h3>☄️ Solar Particle Events</h3>
+                <div id="donkiSepList">
+                    Loading particle events...
+                </div>
+            </div>
+
+        </div>
+
+        <div class="donki-shield-box">
+            <h3>🛡️ Radiation Shield Protocol</h3>
+
+            <p id="donkiShieldMessage">
+                Waiting for NASA space-weather information.
+            </p>
+
+            <button id="donkiShieldCheck" type="button">
+                ACKNOWLEDGE SHIELD CHECK
+            </button>
+
+            <p id="donkiShieldStatus">
+                Shield check not yet acknowledged.
+            </p>
+        </div>
+
+        <p class="donki-footer">
+            Data source: NASA DONKI API. Game alerts are educational
+            simulations, not official spacecraft safety forecasts.
+        </p>
+
+    </section>
+
+    <!-- ===================================
+     ASTROQUEST NASA DONKI DASHBOARD
+==================================== -->
+
+    <button id="donkiOpenButton" class="donki-open-button">
+        🛰️ NASA SPACE WEATHER
+    </button>
+
+    <section id="donkiDashboard" class="donki-dashboard">
+
+        <div class="donki-header">
+            <div>
+                <p class="donki-kicker">NASA DATA CONNECTION</p>
+                <h1>🌌 SPACE WEATHER CENTER</h1>
+                <p>Live space weather intelligence for astronauts</p>
+            </div>
+
+            <button id="donkiCloseButton" class="donki-close">✕</button>
+        </div>
+
+        <div class="donki-status-row">
+            <span id="donkiStatus">🟡 CONNECTING TO NASA...</span>
+            <button id="donkiRefreshButton">↻ REFRESH DATA</button>
+        </div>
+
+        <div class="donki-stats">
+            <div class="donki-stat">
+                <span>☀️</span>
+                <h2 id="donkiFlareCount">--</h2>
+                <p>Solar Flares</p>
+            </div>
+
+            <div class="donki-stat">
+                <span>🌪️</span>
+                <h2 id="donkiCmeCount">--</h2>
+                <p>CMEs</p>
+            </div>
+
+            <div class="donki-stat">
+                <span>🌍</span>
+                <h2 id="donkiStormCount">--</h2>
+                <p>Geomagnetic Storms</p>
+            </div>
+
+            <div class="donki-stat">
+                <span>⚡</span>
+                <h2 id="donkiSepCount">--</h2>
+                <p>Particle Events</p>
+            </div>
+        </div>
+
+        <h2 class="donki-section-title">📡 RECENT NASA SPACE WEATHER EVENTS</h2>
+
+        <div id="donkiEvents" class="donki-events">
+            <p>Connecting to NASA data...</p>
+        </div>
+
+        <h2 class="donki-section-title">🚨 NASA NOTIFICATIONS</h2>
+
+        <div id="donkiNotifications" class="donki-events">
+            <p>Loading notifications...</p>
+        </div>
+
+        <p class="donki-footer">
+            Data source: NASA Community Coordinated Modeling Center (DONKI).
+            Space weather information is preliminary research data, not an operational safety warning.
+        </p>
+
+    </section>
+
 </body>
 
 </html>

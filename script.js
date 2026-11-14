@@ -2654,3 +2654,617 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
 });
+
+/* ==========================================
+   ASTROQUEST - NASA DONKI INTEGRATION
+========================================== */
+
+(function initNASADONKI() {
+
+    function startDONKI() {
+
+        const panel = document.getElementById("nasaDonkiPanel");
+
+        if (!panel) {
+            console.error("NASA DONKI panel not found!");
+            return;
+        }
+
+        const refreshButton = document.getElementById("donkiRefreshBtn");
+        const loading = document.getElementById("donkiLoading");
+        const alertBox = document.getElementById("donkiAlert");
+        const flareList = document.getElementById("donkiFlareList");
+        const sepList = document.getElementById("donkiSepList");
+        const shieldMessage = document.getElementById("donkiShieldMessage");
+        const shieldButton = document.getElementById("donkiShieldCheck");
+        const shieldStatus = document.getElementById("donkiShieldStatus");
+
+        const NASA_API_KEY = "DEMO_KEY";
+
+        let latestSEPCount = 0;
+        let latestFlareCount = 0;
+
+        function getDateRange() {
+            const end = new Date();
+            const start = new Date();
+
+            start.setUTCDate(start.getUTCDate() - 30);
+
+            return {
+                startDate: start.toISOString().slice(0, 10),
+                endDate: end.toISOString().slice(0, 10)
+            };
+        }
+
+        async function fetchDONKI(type, dates) {
+
+            const url =
+                `https://api.nasa.gov/DONKI/${type}` +
+                `?startDate=${dates.startDate}` +
+                `&endDate=${dates.endDate}` +
+                `&api_key=${NASA_API_KEY}`;
+
+            const response = await fetch(url);
+
+            if (!response.ok) {
+                throw new Error(`${type} API error: ${response.status}`);
+            }
+
+            const data = await response.json();
+
+            if (!Array.isArray(data)) {
+                throw new Error(`${type} returned an unexpected response.`);
+            }
+
+            return data;
+        }
+
+        function makeEventCard(title, date, description) {
+
+            const card = document.createElement("div");
+            card.className = "donki-event-card";
+
+            const heading = document.createElement("strong");
+            heading.textContent = title;
+
+            const dateText = document.createElement("p");
+            dateText.textContent = `Date: ${date || "Not provided"}`;
+
+            const detailText = document.createElement("p");
+            detailText.textContent = description || "No additional details available.";
+
+            card.append(heading, dateText, detailText);
+
+            return card;
+        }
+
+        function showEmpty(container, message) {
+            container.replaceChildren();
+
+            const paragraph = document.createElement("p");
+            paragraph.className = "donki-empty";
+            paragraph.textContent = message;
+
+            container.appendChild(paragraph);
+        }
+
+        function displayFlares(flares) {
+
+            flareList.replaceChildren();
+
+            if (!flares.length) {
+                showEmpty(flareList, "No solar flare records were returned for this date range.");
+                return;
+            }
+
+            flares
+                .slice()
+                .sort((a, b) =>
+                    new Date(b.beginTime || 0) - new Date(a.beginTime || 0)
+                )
+                .slice(0, 8)
+                .forEach(flare => {
+
+                    const title = flare.classType
+                        ? `Solar Flare — ${flare.classType}`
+                        : "Solar Flare";
+
+                    const description =
+                        `Location: ${flare.sourceLocation || "Not provided"}`;
+
+                    flareList.appendChild(
+                        makeEventCard(
+                            title,
+                            flare.beginTime || flare.peakTime,
+                            description
+                        )
+                    );
+                });
+        }
+
+        function displaySEP(events) {
+
+            sepList.replaceChildren();
+
+            if (!events.length) {
+                showEmpty(sepList, "No solar energetic particle event records were returned for this date range.");
+                return;
+            }
+
+            events
+                .slice()
+                .sort((a, b) =>
+                    new Date(b.eventTime || 0) - new Date(a.eventTime || 0)
+                )
+                .slice(0, 8)
+                .forEach(event => {
+
+                    sepList.appendChild(
+                        makeEventCard(
+                            "Solar Energetic Particle Event",
+                            event.eventTime,
+                            `Event ID: ${event.sepID || "Not provided"}`
+                        )
+                    );
+                });
+        }
+
+        function updateRadiationAlert(flares, particleEvents) {
+
+            const hasXFlare = flares.some(flare =>
+                /^X/i.test(flare.classType || "")
+            );
+
+            const hasMFlare = flares.some(flare =>
+                /^M/i.test(flare.classType || "")
+            );
+
+            alertBox.className = "donki-alert";
+
+            if (particleEvents.length > 0) {
+
+                alertBox.classList.add("elevated");
+
+                alertBox.textContent =
+                    "⚠️ PARTICLE EVENT RECORDS FOUND: NASA DONKI reports " +
+                    `${particleEvents.length} solar energetic particle event(s) ` +
+                    "in this 30-day window. Review the mission's radiation shielding.";
+
+                shieldMessage.textContent =
+                    "Particle event records were found. In this training simulation, " +
+                    "the astronaut should review the radiation shielding before proceeding.";
+
+            } else if (hasXFlare) {
+
+                alertBox.classList.add("elevated");
+
+                alertBox.textContent =
+                    "⚠️ STRONG FLARE RECORD FOUND: An X-class solar flare appears " +
+                    "in the selected period. Review the radiation shielding.";
+
+                shieldMessage.textContent =
+                    "An X-class flare record was found. Review the radiation shielding " +
+                    "as part of the mission training protocol.";
+
+            } else if (hasMFlare) {
+
+                alertBox.classList.add("caution");
+
+                alertBox.textContent =
+                    "🟠 SOLAR ACTIVITY NOTICE: M-class flare records were found. " +
+                    "Keep monitoring space-weather information.";
+
+                shieldMessage.textContent =
+                    "Solar flare records were found. Continue monitoring the " +
+                    "radiation shielding status.";
+
+            } else {
+
+                alertBox.textContent =
+                    "🟢 No SEP or M/X-class flare records were found in this " +
+                    "30-day search. This is not a guarantee of safe space conditions.";
+
+                shieldMessage.textContent =
+                    "No qualifying event records were found in this search. " +
+                    "Continue normal mission monitoring.";
+            }
+
+            shieldStatus.textContent =
+                "Shield check not yet acknowledged.";
+        }
+
+        async function loadDONKIData() {
+
+            refreshButton.disabled = true;
+            loading.textContent = "🛰️ Fetching real NASA space-weather data...";
+
+            try {
+
+                const dates = getDateRange();
+
+                const results = await Promise.allSettled([
+                    fetchDONKI("FLR", dates),
+                    fetchDONKI("SEP", dates)
+                ]);
+
+                const flareResult = results[0];
+                const sepResult = results[1];
+
+                if (
+                    flareResult.status === "rejected" &&
+                    sepResult.status === "rejected"
+                ) {
+                    const failedRequests = results
+                        .map((result, index) => ({
+                            name: ["FLR", "CME", "GST", "SEP", "Notifications"][index],
+                            result
+                        }))
+                        .filter(item => item.result.status === "rejected");
+
+                    console.error("NASA DONKI failed requests:", failedRequests);
+
+                    throw new Error(
+                        failedRequests.map(item =>
+                            item.name + ": " + item.result.reason
+                        ).join(" | ")
+                    );
+                }
+
+                const flares =
+                    flareResult.status === "fulfilled"
+                        ? flareResult.value
+                        : [];
+
+                const particleEvents =
+                    sepResult.status === "fulfilled"
+                        ? sepResult.value
+                        : [];
+
+                latestFlareCount = flares.length;
+                latestSEPCount = particleEvents.length;
+
+                displayFlares(flares);
+                displaySEP(particleEvents);
+                updateRadiationAlert(flares, particleEvents);
+
+                const partialFailure =
+                    flareResult.status === "rejected" ||
+                    sepResult.status === "rejected";
+
+                loading.textContent = partialFailure
+                    ? "⚠️ Some NASA data could not load. Refresh to try again."
+                    : `✅ NASA data loaded. ${dates.startDate} to ${dates.endDate} UTC.`;
+
+                if (partialFailure) {
+                    console.warn("Partial DONKI API failure:", results);
+                }
+
+            } catch (error) {
+
+                console.error("NASA DONKI error:", error);
+
+                loading.textContent =
+                    "❌ NASA data could not load. Check your internet connection or try again later.";
+
+                alertBox.textContent =
+                    "NASA DONKI is currently unavailable. No space-weather conclusion can be made.";
+
+                alertBox.className = "donki-alert";
+
+                showEmpty(flareList, "Solar flare data unavailable.");
+                showEmpty(sepList, "Particle event data unavailable.");
+
+                shieldMessage.textContent =
+                    "NASA data is unavailable. Continue using the game's normal training instructions.";
+
+            } finally {
+
+                refreshButton.disabled = false;
+            }
+        }
+
+        refreshButton.addEventListener("click", loadDONKIData);
+
+        shieldButton.addEventListener("click", function () {
+
+            shieldStatus.textContent =
+                "✅ Radiation shield check acknowledged in the training simulation.";
+
+            // Event hook for connecting this check to the existing
+            // ASTROQUEST radiation-shield resource system.
+            window.dispatchEvent(
+                new CustomEvent("astroquest:shield-check-requested", {
+                    detail: {
+                        solarParticleEvents: latestSEPCount,
+                        solarFlares: latestFlareCount
+                    }
+                })
+            );
+
+        });
+
+        loadDONKIData();
+    }
+
+    if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", startDONKI);
+    } else {
+        startDONKI();
+    }
+
+})();
+
+/* ==========================================
+   ASTROQUEST - NASA DONKI LIVE SPACE WEATHER
+========================================== */
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const dashboard = document.getElementById("donkiDashboard");
+    const openButton = document.getElementById("donkiOpenButton");
+    const closeButton = document.getElementById("donkiCloseButton");
+    const refreshButton = document.getElementById("donkiRefreshButton");
+
+    if (!dashboard || !openButton || !closeButton || !refreshButton) {
+        console.error("DONKI dashboard HTML elements missing!");
+        return;
+    }
+
+    const API_BASE = "https://ccmc.gsfc.nasa.gov/DONKI-API/get";
+
+    const status = document.getElementById("donkiStatus");
+    const eventsBox = document.getElementById("donkiEvents");
+    const notificationsBox = document.getElementById("donkiNotifications");
+
+    openButton.addEventListener("click", function () {
+        dashboard.classList.add("donki-visible");
+        loadDonkiData();
+    });
+
+    closeButton.addEventListener("click", function () {
+        dashboard.classList.remove("donki-visible");
+    });
+
+    refreshButton.addEventListener("click", loadDonkiData);
+
+    function safeText(value) {
+        return String(value ?? "")
+            .replaceAll("&", "&amp;")
+            .replaceAll("<", "&lt;")
+            .replaceAll(">", "&gt;")
+            .replaceAll('"', "&quot;")
+            .replaceAll("'", "&#039;");
+    }
+
+    function getDate(daysAgo = 7) {
+        const date = new Date();
+        date.setUTCDate(date.getUTCDate() - daysAgo);
+        return date.toISOString().slice(0, 10);
+    }
+
+    async function fetchDonki(type) {
+
+        const params = new URLSearchParams({
+            startDate: getDate(7),
+            endDate: getDate(0)
+        });
+
+        const response = await fetch(
+            `${API_BASE}/${type}?${params.toString()}`
+        );
+
+        if (!response.ok) {
+            throw new Error(`${type} API returned ${response.status}`);
+        }
+
+        return response.json();
+    }
+
+    function renderEvents(type, data, emoji, title) {
+
+        if (!Array.isArray(data) || data.length === 0) {
+            return `<div class="donki-event-card">
+                <h3>${emoji} ${title}</h3>
+                <p>No events reported in this date range.</p>
+            </div>`;
+        }
+
+        return data.slice(0, 8).map(event => {
+
+            const date =
+                event.startTime ||
+                event.eventTime ||
+                event.beginTime ||
+                event.messageIssueTime ||
+                event.submissionTime ||
+                "Date unavailable";
+
+            const location =
+                event.sourceLocation ||
+                event.location ||
+                event.observedRegion ||
+                "Location not specified";
+
+            const description =
+                event.note ||
+                event.messageBody ||
+                event.instruments?.map(item => item.displayName).join(", ") ||
+                "NASA has recorded this space-weather event.";
+
+            const link = event.messageURL || event.link;
+
+            return `
+                <article class="donki-event-card">
+                    <h3>${emoji} ${safeText(title)}</h3>
+                    <p><strong>Date:</strong> ${safeText(date)}</p>
+                    <p><strong>Location:</strong> ${safeText(location)}</p>
+                    <p>${safeText(description)}</p>
+                    ${link ? `<a href="${safeText(link)}"
+                        target="_blank" rel="noopener noreferrer">
+                        View NASA record ↗
+                    </a>` : ""}
+                </article>
+            `;
+
+        }).join("");
+    }
+
+    function renderNotifications(data) {
+
+        if (!Array.isArray(data) || data.length === 0) {
+            notificationsBox.innerHTML =
+                "<p>No notifications found in this date range.</p>";
+            return;
+        }
+
+        notificationsBox.innerHTML = data.slice(0, 8).map(item => {
+
+            return `
+                <article class="donki-event-card">
+                    <h3>🚨 ${safeText(item.messageType || "NASA Update")}</h3>
+                    <p><strong>Issued:</strong>
+                    ${safeText(item.messageIssueTime || "Date unavailable")}</p>
+                    <p>${safeText(
+                (item.messageBody || "NASA notification available.")
+                    .slice(0, 700)
+            )}</p>
+                    ${item.messageURL ? `
+                        <a href="${safeText(item.messageURL)}"
+                           target="_blank" rel="noopener noreferrer">
+                           Read full notification ↗
+                        </a>` : ""}
+                </article>
+            `;
+
+        }).join("");
+    }
+
+    async function loadDonkiData() {
+
+        status.textContent = "🟡 CONNECTING TO NASA...";
+        refreshButton.disabled = true;
+        refreshButton.textContent = "LOADING...";
+
+        eventsBox.innerHTML = "<p>Receiving space-weather data...</p>";
+        notificationsBox.innerHTML = "<p>Loading NASA notifications...</p>";
+
+        try {
+
+            const results = await Promise.allSettled([
+                fetchDonki("FLR"),
+                fetchDonki("CME"),
+                fetchDonki("GST"),
+                fetchDonki("SEP"),
+                fetchDonki("notifications")
+            ]);
+
+            const [flares, cmes, storms, particles, notifications] = results;
+
+            const getData = result =>
+                result.status === "fulfilled" && Array.isArray(result.value)
+                    ? result.value
+                    : [];
+
+            const flareData = getData(flares);
+            const cmeData = getData(cmes);
+            const stormData = getData(storms);
+            const sepData = getData(particles);
+            const notificationData = getData(notifications);
+
+            document.getElementById("donkiFlareCount").textContent =
+                flares.status === "fulfilled" ? flareData.length : "N/A";
+
+            document.getElementById("donkiCmeCount").textContent =
+                cmes.status === "fulfilled" ? cmeData.length : "N/A";
+
+            document.getElementById("donkiStormCount").textContent =
+                storms.status === "fulfilled" ? stormData.length : "N/A";
+
+            document.getElementById("donkiSepCount").textContent =
+                particles.status === "fulfilled" ? sepData.length : "N/A";
+
+            const allFailed = results.every(
+                result => result.status === "rejected"
+            );
+
+            if (allFailed) {
+                throw new Error("All NASA DONKI requests failed.");
+            }
+
+            status.textContent =
+                results.some(result => result.status === "rejected")
+                    ? "🟡 PARTIAL NASA DATA"
+                    : "🟢 NASA DATA CONNECTED";
+
+            const combined = [
+                ...flareData.map(event => ({
+                    type: "Solar Flare",
+                    emoji: "☀️",
+                    event
+                })),
+                ...cmeData.map(event => ({
+                    type: "Coronal Mass Ejection",
+                    emoji: "🌪️",
+                    event
+                })),
+                ...stormData.map(event => ({
+                    type: "Geomagnetic Storm",
+                    emoji: "🌍",
+                    event
+                })),
+                ...sepData.map(event => ({
+                    type: "Solar Energetic Particle",
+                    emoji: "⚡",
+                    event
+                }))
+            ];
+
+            combined.sort((a, b) => {
+                const dateA = new Date(
+                    a.event.beginTime || a.event.startTime || a.event.eventTime || 0
+                );
+                const dateB = new Date(
+                    b.event.beginTime || b.event.startTime || b.event.eventTime || 0
+                );
+                return dateB - dateA;
+            });
+
+            eventsBox.innerHTML = combined.length
+                ? combined.slice(0, 15).map(item =>
+                    renderEvents(
+                        item.type,
+                        [item.event],
+                        item.emoji,
+                        item.type
+                    )
+                ).join("")
+                : "<p>No events found in the selected period.</p>";
+
+            renderNotifications(notificationData);
+
+        } catch (error) {
+
+            console.error("DONKI loading error:", error);
+
+            status.textContent = "🔴 CONNECTION ERROR";
+
+            eventsBox.innerHTML = `
+                <div class="donki-event-card">
+                    <h3>NASA connection unavailable</h3>
+                    <p>${safeText(error.message)}</p>
+                    <p>Please try refreshing in a little while.</p>
+                </div>
+            `;
+
+            notificationsBox.innerHTML =
+                "<p>Notifications could not be loaded.</p>";
+
+        } finally {
+
+            refreshButton.disabled = false;
+            refreshButton.textContent = "↻ REFRESH DATA";
+
+        }
+    }
+
+});
