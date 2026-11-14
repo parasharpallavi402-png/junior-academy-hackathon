@@ -331,6 +331,7 @@
                     →</button>
             </div>
             <p class="quiz-note">💡 Read carefully. Every correct answer earns 5 points.</p>
+
         </section>
 
         <!-- PAGE 4: SIMULATION -->
@@ -418,6 +419,46 @@
     </main>
 
     <footer>JUNIOR ASTRONAUT ACADEMY · AN EDUCATIONAL SPACE ADVENTURE</footer>
+
+
+    <!-- ASTROQUEST SPACE EMERGENCY POPUP -->
+
+    <div id="spaceEmergencyPopup" class="space-emergency-overlay">
+
+        <div class="emergency-card">
+
+            <div class="emergency-icon">🚨</div>
+
+            <h2 id="emergencyTitle">SPACE EMERGENCY!</h2>
+
+            <p id="emergencyMessage">
+                An emergency has been detected!
+            </p>
+
+            <div id="emergencyResourceChanges" class="emergency-resource-changes">
+            </div>
+
+            <div id="emergencyChoices">
+
+                <p>⚠️ Mission control has detected a system disturbance.</p>
+
+                <button onclick="handleEmergencyChoice(0)">
+                    🛡️ ACTIVATE PROTECTION
+                </button>
+
+                <button onclick="handleEmergencyChoice(1)">
+                    ⚡ SAVE POWER
+                </button>
+
+            </div>
+
+            <button onclick="closeSpaceEmergency()">
+                UNDERSTOOD ✓
+            </button>
+
+        </div>
+
+    </div>
     <script src="script.js"></script>
 </body>
 

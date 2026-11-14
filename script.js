@@ -279,6 +279,7 @@ let currentMission = 0;
 let currentQuestion = 0;
 let currentScore = 0;
 let currentCorrect = 0;
+let correctAnswerStreak = 0;
 let answered = false;
 let lastResults = null;
 let simulationMission = 0;
@@ -423,6 +424,7 @@ function startMission(index) {
     currentQuestion = 0;
     currentScore = 0;
     currentCorrect = 0;
+    correctAnswerStreak = 0;
     lastResults = null;
     // Reset astronaut resources for the new mission
     if (typeof resetAstroResources === "function") {
@@ -567,15 +569,28 @@ function checkAnswer(selected) {
         currentCorrect++;
         currentScore += 5;
 
+        // Increase the correct-answer streak.
+        correctAnswerStreak++;
+
+        // Give the astronaut resource rewards.
+        awardCorrectAnswerRewards();
+
         feedback.textContent = "✓ CORRECT! " + question[3];
         feedback.classList.add("good");
 
         // SHOW CORRECT ANSWER ALERT
         window.showSpaceAlert("⭐ Excellent! Correct answer!");
 
+
     } else {
+        // A wrong answer resets the consecutive-answer streak.
+        correctAnswerStreak = 0;
+
         feedback.textContent = "✕ Not quite. " + question[3];
         feedback.classList.add("bad");
+
+        // REGISTER WRONG ANSWER
+        registerWrongAnswer();
 
         // SHOW INCORRECT ANSWER ALERT
         window.showSpaceAlert("⚠️ Not quite! Try the next question!");
@@ -604,6 +619,10 @@ function nextQuestion() {
 function finishMission() {
     const accuracy = Math.round(currentCorrect / 20 * 100);
     const passed = currentCorrect >= 16;
+    // Reward the astronaut for passing this mission.
+    if (passed) {
+        awardMissionCompletionReward();
+    }
     const stars = currentCorrect >= 19 ? 3 : currentCorrect >= 16 ? 2 : currentCorrect >= 10 ? 1 : 0;
 
     const previous = getResult(currentMission);
@@ -2271,6 +2290,72 @@ function updateAstroResources() {
 
 }
 
+// ============================================
+// ASTROQUEST REWARD & RECOVERY SYSTEM
+// ============================================
+
+function showResourceReward(message) {
+    // Remove an older reward message if one is still visible.
+    const oldReward = document.getElementById("resourceRewardToast");
+
+    if (oldReward) {
+        oldReward.remove();
+    }
+
+    const toast = document.createElement("div");
+    toast.id = "resourceRewardToast";
+    toast.className = "resource-reward-toast";
+    toast.textContent = message;
+    toast.setAttribute("role", "status");
+    toast.setAttribute("aria-live", "polite");
+
+    document.body.appendChild(toast);
+
+    setTimeout(() => {
+        toast.remove();
+    }, 2800);
+}
+
+
+// Rewards for every correct answer and streak milestones.
+function awardCorrectAnswerRewards() {
+
+    // Basic reward for every correct answer.
+    changeAstroResources(3, 2, 0);
+
+    let rewardMessage = "🎉 +3% OXYGEN  |  +2% POWER";
+
+    // Every 3 consecutive correct answers.
+    if (correctAnswerStreak % 3 === 0) {
+        changeAstroResources(0, 0, 2);
+        rewardMessage += "  |  +2% SHIELDING";
+    }
+
+    // 5 correct answers in a row.
+    if (correctAnswerStreak === 5) {
+        changeAstroResources(5, 0, 0);
+        rewardMessage += "  |  🔥 STREAK BONUS: +5% OXYGEN";
+    }
+
+    // 10 correct answers in a row.
+    if (correctAnswerStreak === 10) {
+        changeAstroResources(0, 5, 5);
+        rewardMessage += "  |  🏆 +5% POWER & +5% SHIELDING";
+    }
+
+    showResourceReward(rewardMessage);
+}
+
+
+// Special reward for successfully completing a mission.
+function awardMissionCompletionReward() {
+    changeAstroResources(10, 10, 10);
+
+    showResourceReward(
+        "🚀 MISSION COMPLETED! +10% OXYGEN, POWER & SHIELDING!"
+    );
+}
+
 function changeAstroResources(oxygen, power, shield) {
     astroResources.oxygen = Math.max(
         0, Math.min(100, astroResources.oxygen + oxygen)
@@ -2473,4 +2558,71 @@ function handleEmergencyChoice(choice) {
     );
 
     buttons[0].textContent = "CONTINUE MISSION ✓";
+}
+
+// ===================================
+// ASTROQUEST MISSION DANGER SYSTEM
+// ===================================
+
+let missionWrongAnswers = 0;
+
+let dangerPenaltiesApplied = {
+    oxygen: false,
+    power: false,
+    shield: false
+};
+
+function resetMissionDanger() {
+    missionWrongAnswers = 0;
+
+    dangerPenaltiesApplied = {
+        oxygen: false,
+        power: false,
+        shield: false
+    };
+}
+
+function registerWrongAnswer() {
+
+    missionWrongAnswers++;
+
+    const warningBox = document.getElementById("missionWarning");
+
+    if (missionWrongAnswers >= 2 && !dangerPenaltiesApplied.oxygen) {
+
+        dangerPenaltiesApplied.oxygen = true;
+        changeAstroResources(-10, 0, 0);
+
+        showMissionWarning(
+            "⚠️ OXYGEN LEAK!",
+            "Two incorrect answers! Oxygen decreased by 10%."
+        );
+    }
+
+    if (missionWrongAnswers >= 4 && !dangerPenaltiesApplied.power) {
+
+        dangerPenaltiesApplied.power = true;
+        changeAstroResources(0, -15, 0);
+
+        showMissionWarning(
+            "⚡ POWER FAILURE!",
+            "Four incorrect answers! Power decreased by 15%."
+        );
+    }
+
+    if (missionWrongAnswers >= 7 && !dangerPenaltiesApplied.shield) {
+
+        dangerPenaltiesApplied.shield = true;
+        changeAstroResources(0, 0, -20);
+
+        showMissionWarning(
+            "🚨 SHIELD DAMAGE!",
+            "Seven incorrect answers! Shield decreased by 20%."
+        );
+    }
+}
+
+function showMissionWarning(title, message) {
+
+    alert(title + "\n\n" + message);
 }
