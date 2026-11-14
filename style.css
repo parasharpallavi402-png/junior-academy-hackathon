@@ -3733,3 +3733,118 @@ body.mission-bg-9::after {
         padding: 12px 14px;
     }
 }
+
+/* ==========================================
+   ASTROQUEST NEW SPACE GRAPHICS
+========================================== */
+
+/* Space background visible throughout the game */
+.stars {
+    background-image:
+        radial-gradient(2px 2px at 20% 30%, white 50%, transparent),
+        radial-gradient(1px 1px at 70% 20%, white 50%, transparent),
+        radial-gradient(2px 2px at 80% 70%, #9ddfff 50%, transparent),
+        radial-gradient(1px 1px at 40% 80%, white 50%, transparent),
+        radial-gradient(2px 2px at 10% 60%, #c8b5ff 50%, transparent),
+        url("assets/space-background.jpg");
+
+    background-size:
+        190px 190px,
+        190px 190px,
+        190px 190px,
+        190px 190px,
+        190px 190px,
+        cover;
+
+    background-position:
+        0 0,
+        0 0,
+        0 0,
+        0 0,
+        0 0,
+        center;
+
+    background-repeat:
+        repeat,
+        repeat,
+        repeat,
+        repeat,
+        repeat,
+        no-repeat;
+
+    opacity: 0.8;
+}
+
+/* New homepage astronaut image */
+.hero-art .astronaut {
+    display: block;
+    width: min(100%, 430px);
+    height: 100%;
+    object-fit: contain;
+
+    font-size: initial;
+    filter: drop-shadow(0 0 30px #39c5ff88);
+
+    animation: float 4s ease-in-out infinite;
+    z-index: 2;
+}
+
+/* Keep astronaut properly sized on mobile */
+@media (max-width: 600px) {
+    .hero-art .astronaut {
+        width: min(100%, 320px);
+    }
+}
+
+/* ======================================
+   ASTROQUEST MUSIC BUTTON
+====================================== */
+
+.music-toggle {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 100000;
+
+    padding: 12px 20px;
+
+    background: rgba(17, 26, 53, 0.95);
+    color: #39c5ff;
+
+    border: 1px solid #39c5ff;
+    border-radius: 30px;
+
+    font-size: 13px;
+    font-weight: bold;
+
+    cursor: pointer;
+
+    box-shadow: 0 0 12px rgba(57, 197, 255, 0.3);
+    transition: 0.3s ease;
+}
+
+.music-toggle:hover {
+    transform: scale(1.06);
+    box-shadow: 0 0 20px rgba(57, 197, 255, 0.7);
+}
+
+.music-toggle.music-active {
+    color: #8fffdc;
+    border-color: #39e6a0;
+    box-shadow: 0 0 18px rgba(57, 230, 160, 0.5);
+}
+
+@media (max-width: 600px) {
+    .music-toggle {
+        top: 12px;
+        right: 12px;
+        padding: 9px 13px;
+        font-size: 11px;
+    }
+}
+
+#space-sound-button.music-active {
+    color: #8fffdc;
+    border-color: #39e6a0;
+    box-shadow: 0 0 18px rgba(57, 230, 160, 0.5);
+}

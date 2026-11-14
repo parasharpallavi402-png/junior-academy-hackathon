@@ -1219,95 +1219,66 @@ function showStoryScene(completedMissionIndex) {
 
 })();
 
-/* ===== SPACE SOUND SYSTEM ===== */
 
-(function createSpaceSoundSystem() {
+// ======================================
+// ASTROQUEST MUSIC SYSTEM
+// Reuses the old SOUND button position
+// ======================================
 
-    if (document.getElementById("space-sound-button")) return;
+if (!document.getElementById("space-sound-button")) {
+    const musicButton = document.createElement("button");
+    musicButton.id = "space-sound-button";
+    document.body.appendChild(musicButton);
+}
+document.addEventListener("DOMContentLoaded", function () {
 
-    let soundEnabled = false;
-    let audioContext = null;
+    const backgroundMusic = document.getElementById("backgroundMusic");
 
-    const soundButton = document.createElement("button");
-    soundButton.id = "space-sound-button";
-    soundButton.textContent = "🔇 Sound OFF";
+    // Reuse the old SOUND button's exact position and styling
+    const musicToggle = document.getElementById("space-sound-button");
 
-    document.body.appendChild(soundButton);
-
-    function getAudioContext() {
-        const AudioClass = window.AudioContext || window.webkitAudioContext;
-
-        if (!AudioClass) return null;
-
-        if (!audioContext) {
-            audioContext = new AudioClass();
-        }
-
-        if (audioContext.state === "suspended") {
-            audioContext.resume();
-        }
-
-        return audioContext;
+    if (!backgroundMusic || !musicToggle) {
+        console.error("ASTROQUEST music elements not found!");
+        return;
     }
 
-    function playTone(frequency, duration, type = "sine") {
-        if (!soundEnabled) return;
+    let musicIsPlaying = false;
 
-        const context = getAudioContext();
-        if (!context) return;
+    backgroundMusic.loop = true;
+    backgroundMusic.volume = 0.35;
 
-        const oscillator = context.createOscillator();
-        const volume = context.createGain();
+    musicToggle.textContent = "🎵 MUSIC: OFF";
 
-        oscillator.type = type;
-        oscillator.frequency.value = frequency;
+    musicToggle.addEventListener("click", async function () {
 
-        volume.gain.setValueAtTime(0.12, context.currentTime);
-        volume.gain.exponentialRampToValueAtTime(
-            0.001,
-            context.currentTime + duration
-        );
+        if (!musicIsPlaying) {
 
-        oscillator.connect(volume);
-        volume.connect(context.destination);
+            try {
+                await backgroundMusic.play();
 
-        oscillator.start();
-        oscillator.stop(context.currentTime + duration);
-    }
+                musicIsPlaying = true;
+                musicToggle.textContent = "🎵 MUSIC: ON";
+                musicToggle.classList.add("music-active");
 
-    window.playSpaceSound = function (type) {
-        if (!soundEnabled) return;
+            } catch (error) {
+                console.error("Music playback error:", error);
+                alert("Music could not start. Please try again.");
+            }
 
-        if (type === "click") {
-            playTone(650, 0.12);
+        } else {
+
+            backgroundMusic.pause();
+
+            musicIsPlaying = false;
+            musicToggle.textContent = "🎵 MUSIC: OFF";
+            musicToggle.classList.remove("music-active");
+
         }
 
-        if (type === "launch") {
-            playTone(180, 0.6, "sawtooth");
-            setTimeout(() => playTone(420, 0.5), 250);
-        }
-
-        if (type === "success") {
-            playTone(523, 0.2);
-            setTimeout(() => playTone(659, 0.2), 180);
-            setTimeout(() => playTone(784, 0.4), 360);
-        }
-    };
-
-    soundButton.addEventListener("click", () => {
-        soundEnabled = !soundEnabled;
-
-        soundButton.textContent = soundEnabled
-            ? "🔊 Sound ON"
-            : "🔇 Sound OFF";
-
-        if (soundEnabled) {
-            getAudioContext();
-            playTone(523, 0.2);
-        }
     });
 
-})();
+});
+
 
 /* ===== MISSION COUNTDOWN SYSTEM ===== */
 
@@ -2626,3 +2597,60 @@ function showMissionWarning(title, message) {
 
     alert(title + "\n\n" + message);
 }
+// ======================================
+// ASTROQUEST BACKGROUND MUSIC SYSTEM
+// ======================================
+
+// ======================================
+// ASTROQUEST BACKGROUND MUSIC SYSTEM
+// ======================================
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const backgroundMusic = document.getElementById("backgroundMusic");
+    const musicToggle = document.getElementById("musicToggle");
+
+    if (!backgroundMusic || !musicToggle) {
+        console.error("ASTROQUEST music elements not found!");
+        return;
+    }
+
+    let musicIsPlaying = false;
+
+    musicToggle.addEventListener("click", async function () {
+
+        if (!musicIsPlaying) {
+
+            try {
+                backgroundMusic.volume = 0.35;
+
+                await backgroundMusic.play();
+
+                musicIsPlaying = true;
+                musicToggle.textContent = "🎵 MUSIC: ON";
+                musicToggle.classList.add("music-active");
+
+                console.log("ASTROQUEST music started!");
+
+            } catch (error) {
+
+                console.error("Music playback error:", error);
+                alert("Music could not start. Check the browser console.");
+
+            }
+
+        } else {
+
+            backgroundMusic.pause();
+
+            musicIsPlaying = false;
+            musicToggle.textContent = "🎵 MUSIC: OFF";
+            musicToggle.classList.remove("music-active");
+
+            console.log("ASTROQUEST music stopped!");
+
+        }
+
+    });
+
+});
